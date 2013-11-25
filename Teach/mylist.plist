@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>isMixpanelEnabled</key>
+	<true/>
+	<key>MessageTitle</key>
+	<string>Gooru</string>
+	<key>ServerURL</key>
+	<string>http://concept.goorulearning.org</string>
+	<key>EmptyEmailID</key>
+	<string>Please double check your Username.</string>
+	<key>ForgotPasswordEmailSuccess</key>
+	<string>Success! An email has been sent with instructions on how to reset your password.
+Please contact support@goorulearning.org if you run into any issues.</string>
+	<key>EmptyPassword</key>
+	<string>Don&apos;t forget to enter your password!</string>
+	<key>InvalidUserNamePassword</key>
+	<string>Please enter your Username and password.</string>
+	<key>SuccessAddMessage</key>
+	<string>Record added successfully.</string>
+	<key>ConnectionError</key>
+	<string>Unable to connect.</string>
+	<key>EmptyServiceURL</key>
+	<string>Configure Service Url.</string>
+	<key>EmailFormat</key>
+	<string>Please check that you have entered a valid e-mail address.</string>
+	<key>APIKey</key>
+	<string>b5cd1620-0c14-11e3-b8f5-12313b0af644</string>
+	<key>NoConnection</key>
+	<string>Oops! It looks like you are not connected to the internet. Please reconnect and try again.</string>
+	<key>EnterNotes</key>
+	<string>Please enter Notes.</string>
+	<key>ResourceNotFound</key>
+	<string>Resources not found.</string>
+	<key>SuggestResourceMessage</key>
+	<string>Please take a quiz so that we can suggest resources for you!</string>
+	<key>StarterClasspages</key>
+	<array>
+		<string>Get Started</string>
+		<string>Algebra 1</string>
+		<string>Ancient Civilizations</string>
+		<string>Physics</string>
+		<string>English Language Arts 8</string>
+	</array>
+	<key>StarterClasspages1</key>
+	<array>
+		<string>Welcome to Gooru!
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;array&gt;
+	&lt;string&gt;Get Started&lt;/string&gt;
+	&lt;string&gt;Algebra 1&lt;/string&gt;
+	&lt;string&gt;Ancient Civilizations&lt;/string&gt;
+	&lt;string&gt;Physics&lt;/string&gt;
+	&lt;string&gt;English Language Arts 8&lt;/string&gt;
+&lt;/array&gt;
+&lt;/plist&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;array&gt;
+	&lt;string&gt;Get Started&lt;/string&gt;
+	&lt;string&gt;Algebra 1&lt;/string&gt;
+	&lt;string&gt;Ancient Civilizations&lt;/string&gt;
+	&lt;string&gt;Physics&lt;/string&gt;
+	&lt;string&gt;English Language Arts 8&lt;/string&gt;
+&lt;/array&gt;
+&lt;/plist&gt;
+</string>
+		<string>Algebra 1</string>
+		<string>Ancient Civilizations</string>
+		<string>Physics</string>
+		<string>English Language Arts 8</string>
+	</array>
+	<key>StarerClasspagesGooruId</key>
+	<array>
+		<string>0305adfe-2edc-4054-a29e-616f11f06181</string>
+		<string>272e9c46-c0a9-427a-9a0d-f31eb051ce3a</string>
+		<string>087ddf35-6b2b-4411-9832-d8e789a25888</string>
+		<string>6b2fbea8-b3e9-4b74-937b-28e209049eec</string>
+		<string>18c2e8db-ffcc-471e-960b-78b5ae30b98d</string>
+	</array>
+	<key>StarerClasspagesGooruIdTeach</key>
+	<array>
+		<string>6b2fbea8-b3e9-4b74-937b-28e209049eec</string>
+		<string>18c2e8db-ffcc-471e-960b-78b5ae30b98d</string>
+	</array>
+	<key>StarterClasspageClasscodes</key>
+	<array>
+		<string>I6WAII1</string>
+		<string>I4VFPII</string>
+		<string>I4VDCII</string>
+		<string>I6RQYII</string>
+		<string>I8RCRII</string>
+	</array>
+	<key>StarterClasspageClasscodesTeach</key>
+	<array>
+		<string>I6RQYII</string>
+		<string>I8RCRII</string>
+	</array>
+	<key>StarterClasspageTeach</key>
+	<array>
+		<string>Teach Something</string>
+		<string>Your First Classpage</string>
+	</array>
+	<key>GoogleSignInURL</key>
+	<string>http://concept.goorulearning.org/gmarketplace/sakai?from=google&amp;domain=gmail.com</string>
+</dict>
+</plist>

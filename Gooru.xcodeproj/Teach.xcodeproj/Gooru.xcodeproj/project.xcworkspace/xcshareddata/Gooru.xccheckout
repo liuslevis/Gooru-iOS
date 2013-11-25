@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>14657B73-3C17-4553-8461-171AE7B10C61</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Gooru</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1F7B6323-8B6A-4FB1-B1C2-3D250130EBFC</key>
+		<string>http://scm.ednovo.org/gitblit/git/gooru-dots-mobile.git</string>
+		<key>6FE08CA3-3310-4BD6-895A-A04F2AC25B43</key>
+		<string>git://github.com/jakemdunn/google-api-objectivec-client.git</string>
+		<key>C2ABDB17-7BB2-41A3-B39C-EACD4DFF2300</key>
+		<string>git://github.com/ShareKit/ShareKit.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Gooru.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1F7B6323-8B6A-4FB1-B1C2-3D250130EBFC</key>
+		<string>../..</string>
+		<key>6FE08CA3-3310-4BD6-895A-A04F2AC25B43</key>
+		<string>../../Submodules/ShareKit/Submodules/google-api-objectivec</string>
+		<key>C2ABDB17-7BB2-41A3-B39C-EACD4DFF2300</key>
+		<string>../../Submodules/ShareKit</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://scm.ednovo.org/gitblit/git/gooru-dots-mobile.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1F7B6323-8B6A-4FB1-B1C2-3D250130EBFC</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6FE08CA3-3310-4BD6-895A-A04F2AC25B43</string>
+			<key>IDESourceControlWCCName</key>
+			<string>google-api-objectivec</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1F7B6323-8B6A-4FB1-B1C2-3D250130EBFC</string>
+			<key>IDESourceControlWCCName</key>
+			<string>gooru-dots-mobile</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C2ABDB17-7BB2-41A3-B39C-EACD4DFF2300</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ShareKit</string>
+		</dict>
+	</array>
+</dict>
+</plist>
