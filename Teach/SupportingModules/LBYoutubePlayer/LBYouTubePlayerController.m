@@ -97,6 +97,7 @@
 #pragma mark - Alerts -
 
 -(void)login_AlertShow:(NSString *)strMessage {
+   AppDelegate *appDelegate = (AppDelegate*) [[UIApplication sharedApplication] delegate];
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[appDelegate getValueByKey:@"MessageTitle"] message:strMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert show];

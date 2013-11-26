@@ -755,7 +755,7 @@ static NSString *ETagIfPresent(GTLObject *obj) {
 
   // Build up the array of RPC calls.
   NSMutableArray *rpcPayloads = [NSMutableArray arrayWithCapacity:numberOfQueries];
-  NSMutableArray *requestIDs = [NSMutableSet setWithCapacity:numberOfQueries];
+  NSMutableArray *requestIDs = [NSMutableArray arrayWithCapacity:numberOfQueries];
   for (GTLQuery *query in queries) {
     NSString *methodName = query.methodName;
     NSDictionary *parameters = query.JSON;

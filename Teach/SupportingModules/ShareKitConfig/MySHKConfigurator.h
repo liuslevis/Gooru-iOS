@@ -29,6 +29,7 @@
 //
 
 #import "DefaultSHKConfigurator.h"
+#import "AppDelegate.h"
 
 @interface MySHKConfigurator : DefaultSHKConfigurator
 
