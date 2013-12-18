@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SummaryPageViewController">
@@ -421,6 +421,6 @@
         <image name="btnBackToSummary.png" width="180" height="37"/>
         <image name="btnReviewAnswer.png" width="208" height="54"/>
         <image name="correct.png" width="34" height="37"/>
-        <image name="reactFace1.png" width="67" height="68"/>
+        <image name="reactFace1.png" width="70" height="70"/>
     </resources>
 </document>

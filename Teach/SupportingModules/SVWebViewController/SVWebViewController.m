@@ -7,6 +7,7 @@
 //  https://github.com/samvermette/SVWebViewController
 
 #import "SVWebViewController.h"
+#import "LoginViewController.h"
 
 @interface SVWebViewController () <UIWebViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 
@@ -310,9 +311,9 @@ bool calledDismiss = FALSE;
     [self updateToolbarItems];
     if ([[webView stringByEvaluatingJavaScriptFromString:@"document.title"] isEqualToString:@"Gooru | A Free Search Engine for Learning"]) {
         
-         NSString* token = [self getTokenFromCookie];
+        [self getTokenFromCookie];
 
-          }
+    }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
@@ -394,7 +395,7 @@ bool calledDismiss = FALSE;
 	[self dismissModalViewControllerAnimated:YES];
 }
 
-- (NSString*)getTokenFromCookie {
+- (void)getTokenFromCookie {
     NSHTTPCookie *cookie;
     NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (cookie in [cookieJar cookies]) {
@@ -404,16 +405,14 @@ bool calledDismiss = FALSE;
                 NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
                 [standardUserDefaults setObject:[cookie value] forKey:@"gmailtoken"];
                 if (calledDismiss) {
-                         [self dismissModalViewControllerAnimated:YES];
+                    
+                    [self dismissModalViewControllerAnimated:YES];
                     calledDismiss = FALSE;
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"onGmailAuth" object:self userInfo:nil];
                 }
-           
-                return [cookie value];
-                
-
         }
     }
-    return nil;
 }
 
 @end

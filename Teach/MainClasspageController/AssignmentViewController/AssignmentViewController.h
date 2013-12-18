@@ -2,7 +2,7 @@
 //  AssignmentViewController.h
 // Gooru
 //
-//  Created by Gooru on 8/12/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -72,6 +72,7 @@
        
 }
 @property (strong, nonatomic) IBOutlet UIButton *btnExitClasspage;
+@property (strong, nonatomic) IBOutlet UIButton *btnExitClasspageNoAssignment;
 @property BOOL isLoggedOut;
 @property BOOL isYourFirstClasspageAss;
 //BA Assignment Tab

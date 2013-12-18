@@ -2,7 +2,7 @@
 //  EditAssignmentPopupViewController.m
 // Gooru
 //
-//  Created by Gooru on 8/13/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -115,9 +115,30 @@ NSMutableDictionary* dictAssignment;
     [lblEditAssignmentDueDate setText:[dictAssignment valueForKey:@"AssignmentDueDate"]];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //        [dateFormatter setLocale:[NSLocale currentLocale]];
     [dateFormatter setDateFormat:@"MM/dd/yyyy"];
     [self.flatDatePicker setDate:[dateFormatter dateFromString:[dictAssignment valueForKey:@"AssignmentDueDate"]] animated:NO];
-
+ 
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    [dateFormatter setLocale:[NSLocale currentLocale]];
+//    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+//    NSDate *plannedEndDate=[dateFormatter dateFromString:[dictAssignment valueForKey:@"AssignmentDueDate"]];
+//    NSDate *comparatorDate = [NSDate dateWithTimeIntervalSince1970:(0)];
+//    NSString* str = [dateFormatter stringFromDate:plannedEndDate];
+//    NSString* str1 = [dateFormatter stringFromDate:comparatorDate];
+//    NSLog(@"str1=%@",str1);
+//    NSLog(@"str=%@",str);
+//    
+//    NSComparisonResult result = [plannedEndDate compare:comparatorDate];
+//    
+//    if (result!=NSOrderedSame)
+//    {
+//       
+//        
+//    }else{
+//        lblEditAssignmentDueDate.hidden=TRUE;
+//    }
+    
 
     [txtViewEditAssignmentDirection setText:[dictAssignment valueForKey:@"AssignmentDirection"]];
     if ([txtViewEditAssignmentDirection.text isEqualToString:@"NA"]) {
@@ -328,6 +349,10 @@ NSMutableDictionary* dictAssignment;
                          // Do other things
                      }];
     
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+    [dictionary setObject:txtFieldEditAssignmentTitle.text forKey:@"AssignmentTitle"];
+    [dictionary setObject:currentAssignmentIdBeingEdited forKey:@"AssignmentId"];
+    [appDelegate logMixpanelforevent:@"Assignment Edit-Cancel" and:dictionary];
     [self performSelector:@selector(removeCurrentDetailViewController) withObject:nil afterDelay:0.3];
     
    
@@ -342,10 +367,10 @@ NSMutableDictionary* dictAssignment;
     
     NSMutableArray* parameterKeys = [NSMutableArray arrayWithObjects:@"data", nil];
     
-    NSString* assignmentDirection = txtViewEditAssignmentDirection.text;
-    NSString *strippedContent = [assignmentDirection stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSCharacterSet *doNotWant = [NSCharacterSet characterSetWithCharactersInString:@"\\\n"];
-    strippedContent = [[strippedContent componentsSeparatedByCharactersInSet: doNotWant] componentsJoinedByString: @""];
+    NSString* assignmentDirections = txtViewEditAssignmentDirection.text;
+    NSString *strippedContent = [assignmentDirections stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSCharacterSet *remobvableVariables = [NSCharacterSet characterSetWithCharactersInString:@"\\\n"];
+    strippedContent = [[strippedContent componentsSeparatedByCharactersInSet: remobvableVariables] componentsJoinedByString: @""];
     strippedContent = [strippedContent  stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
    
     NSLog(@"strippedContent : %@", strippedContent);
@@ -361,6 +386,14 @@ NSMutableDictionary* dictAssignment;
         
         NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSLog(@"updateClasspage Response : %@",responseStr);
+        //Mixpanel track Successful Login
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setValue:txtFieldEditAssignmentTitle.text forKey:@"AssignmentTitle"];
+        lblEditAssignmentDueDate.text=[appDelegate ifNullStrReplace:lblEditAssignmentDueDate.text With:@"NA"];
+        [dictionary setValue:lblEditAssignmentDueDate.text forKey:@"AssignmentDueDate"];
+        [dictionary setValue:currentAssignmentIdBeingEdited forKey:@"AssignmentId"];
+        [dictionary setValue:strippedContent forKey:@"AssignmentDirection"];
+        [appDelegate logMixpanelforevent:@"Assignment Edit-Save" and:dictionary];
         
         NSArray *results = [responseStr JSONValue];
         
@@ -388,7 +421,10 @@ NSMutableDictionary* dictAssignment;
         
         //Set Direction
         UILabel* lblAssignmentDirectionBeingEdited = (UILabel*)[currentAssignmentViewBeingEdited viewWithTag:TAG_ASSIGNMENT_DIRECTION];
-        [lblAssignmentDirectionBeingEdited setText:[[results valueForKey:@"description"] stripHtml]];
+        
+        NSString *decodedString = [[results valueForKey:@"description"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+        [lblAssignmentDirectionBeingEdited setText:[decodedString stripHtml]];
         if (![[results valueForKey:@"description"] isEqualToString:@""]) {
             if ([lblAssignmentDirectionBeingEdited isHidden]) {
                 [lblAssignmentDirectionBeingEdited setHidden:FALSE];

@@ -75,7 +75,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:self.videoController];
     [self.videoController stop];
     [self.videoController setFullscreen:FALSE animated:YES];
-    [self login_AlertShow:@"End of video!!!"];
+    [self special_AlertShow:@"Next video is not available."];
     
 //    self.videoController.initialPlaybackTime = -1.0;
     
@@ -96,10 +96,9 @@
 
 #pragma mark - Alerts -
 
--(void)login_AlertShow:(NSString *)strMessage {
-   AppDelegate *appDelegate = (AppDelegate*) [[UIApplication sharedApplication] delegate];
+-(void)special_AlertShow:(NSString *)strMessage {
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[appDelegate getValueByKey:@"MessageTitle"] message:strMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@" " message:strMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert show];
 }
 

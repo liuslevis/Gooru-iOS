@@ -2,7 +2,7 @@
 //  SummaryPageViewController.m
 // Gooru
 //
-//  Created by Gooru on 17/09/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -122,6 +122,9 @@ AppDelegate* appDelegate;
 
 - (id)initWithCollectionDetails:(NSMutableDictionary*)dictIncomingCollections andResourceDetails:(NSMutableDictionary*)dictIncomingResourceDetails andCollectionPlayerObject:(CollectionPlayerV2ViewController*)incomingCollectionPlayerV2ViewController{
     
+//    NSLog(@"dictIncomingCollections : %@",[dictIncomingCollections description]);
+//    NSLog(@"dictIncomingResourceDetails : %@",[dictIncomingResourceDetails description]);
+    
     collectionPlayerV2ViewController = incomingCollectionPlayerV2ViewController;
     
     dictCollection = dictIncomingCollections;
@@ -145,6 +148,19 @@ AppDelegate* appDelegate;
     viewMainSubview.frame=CGRectMake(0, 0, viewMainSubview.frame.size.width, viewMainSubview.frame.size.height);
     [viewTabsParent addSubview:viewMainSubview];
     standardUserDefaults = [NSUserDefaults standardUserDefaults];
+
+    NSString* sessionTokenToUse = [standardUserDefaults stringForKey:@"token"];
+    
+    if ([sessionTokenToUse isEqualToString:@"NA"]) {
+        
+        [appDelegate logMixpanelforevent:@"Summary page Logged Out" and:nil];
+
+        
+    }else{
+        
+        [appDelegate logMixpanelforevent:@"Summary page Logged In" and:nil];
+
+    }
 
     //Adding Answer Review View
     [viewReviewAnswer setFrame:CGRectMake(1024, 0, viewReviewAnswer.frame.size.width, viewReviewAnswer.frame.size.height)];
@@ -262,6 +278,11 @@ AppDelegate* appDelegate;
         
         
     }
+    
+//    NSLog(@"dictSkipped : %@",[dictSkipped description]);
+//    NSLog(@"dictCorrect : %@",[dictCorrect description]);
+//    NSLog(@"dictIncorrect : %@",[dictIncorrect description]);
+    
 
     [btnOverview setTitle:[NSString stringWithFormat:@"%@(%i)",btnOverview.titleLabel.text,[dictAllResources count]] forState:UIControlStateNormal];
     [btnCorrect setTitle:[NSString stringWithFormat:@"%@(%i)",btnCorrect.titleLabel.text,[dictCorrect count]] forState:UIControlStateNormal];
@@ -317,8 +338,23 @@ AppDelegate* appDelegate;
         
         NSMutableDictionary* dictResourceInfo = [dictResources valueForKey:[keysDictResources objectAtIndex:i]];
         
-         //Summary Item Parent
+        
+//        IBOutlet UILabel *lblRefSerialNumber;
+//        IBOutlet UIImageView *imgViewRefThumbnail;
+//        IBOutlet UIImageView *imgViewRefValidator;
+//        IBOutlet UIImageView *imgViewRefDescriptionHint;
+//        
+//        IBOutlet UILabel *lblRefResourceTitle;
+//        IBOutlet UILabel *lblRefResourceDescription;
+//        IBOutlet UIImageView *imgViewRefReaction;
+//        IBOutlet UIButton *btnRefReviewAnswer;
+//        IBOutlet UIView *viewRefSeparator;
+        
+        //Summary Item Parent
         UIView* viewSummaryItem = [[UIView alloc] init];
+        
+        
+//        [viewSummaryItem setBackgroundColor:[UIColor purpleColor]];
         
         //Serial Number
         UILabel* lblSerialNumber = [[UILabel alloc] initWithFrame:lblRefSerialNumber.frame];
@@ -337,6 +373,14 @@ AppDelegate* appDelegate;
         [imgViewThumbnail setImageWithURL:[NSURL URLWithString:[dictResourceInfo valueForKey:RESOURCE_THUMBNAIL]] placeholderImage:[UIImage imageNamed:@"defaultCollection@2x.png"]];
         [viewSummaryItem addSubview:imgViewThumbnail];
         
+        //Resource Type Icons
+        UIImageView* imgViewResourceTypeIcon = [[UIImageView alloc] init];
+        imgViewResourceTypeIcon.frame = CGRectMake(50, 38, 30, 22);
+        
+        imgViewResourceTypeIcon.image = [collectionPlayerV2ViewController imageForResourceType:[dictResourceInfo valueForKey:RESOURCE_CATEGORY]];
+        
+        [imgViewThumbnail addSubview:imgViewResourceTypeIcon];
+        
         //Button for retrying
         UIButton* btnResource = [UIButton buttonWithType:UIButtonTypeCustom];
         [btnResource setFrame:imgViewThumbnail.frame];
@@ -352,7 +396,11 @@ AppDelegate* appDelegate;
         //Validator
         UIImageView* imgViewValidator = [[UIImageView alloc] initWithFrame:imgViewRefValidator.frame];
         [viewSummaryItem addSubview:imgViewValidator];
-
+        
+        
+        
+                
+        
         
         //Resource Title
         UILabel* lblResourceTitle = [[UILabel alloc] initWithFrame:lblRefResourceTitle.frame];
@@ -671,7 +719,7 @@ AppDelegate* appDelegate;
             username = @"Anonymous";
         }
         [dictionary setObject:username forKey:@"Username"];
-     //   [appDelegate logMixpanelforevent:@"Email Summary" and:dictionary];
+        [appDelegate logMixpanelforevent:@"Email Summary" and:dictionary];
         
         [self createHtmlSummary];
     }
@@ -712,8 +760,8 @@ AppDelegate* appDelegate;
     
 
     NSString* strFields = [NSString stringWithFormat:@"{\"html\" : \"%@\",\"fileName\" : \"iPadSummary\"}}",html];
-    NSMutableArray* parameterValues =  [NSArray arrayWithObjects:strFields, nil];
-    NSMutableDictionary* dictPostParams = [NSDictionary dictionaryWithObjects:parameterValues forKeys:parameterKeys];
+    NSMutableArray* parameterValues =  [NSMutableArray arrayWithObjects:strFields, nil];
+    NSMutableDictionary* dictPostParams = [NSMutableDictionary dictionaryWithObjects:parameterValues forKeys:parameterKeys];
     
     httpClient.parameterEncoding = AFJSONParameterEncoding;
     
@@ -746,6 +794,7 @@ AppDelegate* appDelegate;
             emailController.view.superview.frame = CGRectMake(236, 146, 540, 540);
             
              [emailController setMessageBody:emailBody isHTML:NO];
+            //Mixpanel track Email
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             [dictionary setObject:[dictCollection valueForKey:COLLECTION_TITLE] forKey:@"CollectionTitle"];
             
@@ -758,9 +807,11 @@ AppDelegate* appDelegate;
             }
             
             [dictionary setObject:username forKey:@"Username"];
+            [appDelegate logMixpanelforevent:@"Email Summary Sent" and:dictionary];
         } else {
             // Handle the error
-     
+            
+            
             [self.view makeToast:@"No e-mail client configured on the device."
                         duration:2.0
                         position:@"center"];
@@ -1007,7 +1058,7 @@ AppDelegate* appDelegate;
 #pragma mark Alert View
 -(void)alertWithMessage:(NSString *)strMessage {
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[appDelegate getValueByKey:@"MessageTitle"] message:strMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Gooru" message:strMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert show];
 }
 

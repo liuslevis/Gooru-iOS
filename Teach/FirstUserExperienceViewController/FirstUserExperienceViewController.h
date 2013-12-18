@@ -2,7 +2,7 @@
 //  FirstUserExperienceViewController.h
 // Gooru
 //
-//  Created by Gooru on 8/16/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -42,6 +42,8 @@
 @property (strong, nonatomic) IBOutlet UIView *viewFUEforOther;
 @property (strong, nonatomic) IBOutlet UIView *viewFUEforTeach;
 @property (strong, nonatomic) IBOutlet UIView *viewFUEforStudy;
+@property (strong, nonatomic) IBOutlet UIView *viewFUEforTeachNoClasspages;
+
 @property (strong, nonatomic) IBOutlet UITextField *textFieldClassCode;
 @property (strong, nonatomic) IBOutlet UIImageView *imageViewGreenHighlightFirstUser;
 @property (strong, nonatomic) IBOutlet UIImageView *imageViewGreenHighlightStudyExp;
@@ -53,4 +55,5 @@
 - (IBAction)btnActionStarterClasspages:(id)sender;
 - (IBAction)btnActionSignup:(id)sender;
 - (id)initWithCheckingStringForFUE:(NSString *)checkingString;
+- (IBAction)btnActionStudyNow:(id)sender;
 @end

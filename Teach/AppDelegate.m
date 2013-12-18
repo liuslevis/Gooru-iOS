@@ -2,7 +2,7 @@
 //  AppDelegate.m
 // Gooru
 //
-//  Created by Gooru on 4/30/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -26,14 +26,16 @@
 //  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //
+//
 
 #import "AppDelegate.h"
 #import "Reachability.h"
 #import "AFHTTPClient.h"
+#import "Mixpanel.h"
 #import "ViewController.h"
 #import "MainClasspageViewController.h"
 #import "SHKConfiguration.h"
-#define MIXPANEL_TOKEN @"b4be9c59fb4b1c3128995681329feed3"
+#define MIXPANEL_TOKEN @""
 
 
 @implementation AppDelegate
@@ -51,11 +53,9 @@
     NSURL *url = [NSURL URLWithString:[self getValueByKey:@"ServerURL"]];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     
-    NSMutableArray* gooru__keysMyPost = [NSArray arrayWithObjects:@"isGuestUser",@"apiKey", nil];
-    NSMutableArray* gooru__objectsMyPost =  [NSArray arrayWithObjects:@"true", [self getValueByKey:@"APIKey"], nil];
-    
-    
-    NSMutableDictionary* params = [NSDictionary dictionaryWithObjects:gooru__objectsMyPost forKeys:gooru__keysMyPost];
+    NSMutableArray* gooru__keysMyPost = [NSMutableArray arrayWithObjects:@"isGuestUser",@"apiKey", nil];
+	NSMutableArray* gooru__objectsMyPost =  [NSArray arrayWithObjects:@"true", [self getValueByKey:@"APIKey"], nil];    
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjects:gooru__objectsMyPost forKeys:gooru__keysMyPost];
     
     NSLog(@"params : %@",params);
     
@@ -111,6 +111,8 @@
     [SHKConfiguration sharedInstanceWithConfigurator:configurator];
     // Initialize the library with your
     // Mixpanel project token, MIXPANEL_TOKEN
+  
+
 
     // Tell iOS you want  your app to receive push notifications
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
@@ -120,6 +122,8 @@
 // Delegation methods
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     const void *devTokenBytes = [devToken bytes];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel.people addPushDeviceToken:devToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
@@ -157,6 +161,7 @@
     }
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [dictionary setObject:timeSpent forKey:@"AppRunningTime"];
+    [self logMixpanelforevent:@"App Closed" and:dictionary];
     
 
 }
@@ -174,6 +179,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [self logMixpanelforevent:@"App Opened" and:nil];
         NSDate *thisMagicMoment = [NSDate date];
     [[NSUserDefaults standardUserDefaults] setObject:thisMagicMoment forKey:@"AppOpened"];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -233,6 +239,24 @@
     
     
 }
+
+
+
+
+#pragma mark Mixpanel tracking
+- (void)logMixpanelforevent:(NSString*)eventTitle and:(NSMutableDictionary*)properties{
+    
+    if ([self getValueByKey:@"isMixpanelEnabled"]) {
+        //Mixpanel Tracking
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel track:eventTitle properties:properties];
+    }else{
+        NSLog(@"Mixpanel Disabled");
+    }
+
+    
+}
+
 
 
 #pragma mark Set Resource Type Image
@@ -297,34 +321,6 @@
 	return value;
 }
 
-#pragma mark Get from pList
--(NSArray*) getArrayValueByKey:(NSString*)key{
-    //    NSLog(@"initialize Resources.m");
-	BOOL success;
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"mylist.plist"];
-	success = [fileManager fileExistsAtPath:filePath];
-    //	NSLog(@"%@", filePath);
-	
-	if(!success){
-        //		NSLog(@"not success");
-		NSError *error;
-		// The writable database does not exist, so copy the default to the appropriate location.
-		NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"mylist.plist"];
-		success = [fileManager copyItemAtPath:defaultDBPath toPath:filePath error:&error];
-		if (!success) {
-			NSAssert1(0, @"Failed to create Messages.plist file with message '%@'.", [error localizedDescription]);
-		}
-	}
-	
-	//plistDictionary = [[NSDictionary alloc] initWithContentsOfFile:filePath];
-    NSDictionary *plistDictionary = [NSDictionary dictionaryWithContentsOfFile:filePath];
-    NSArray *value =  [plistDictionary objectForKey:key];
-	return value;
-}
 
 #pragma mark Library Hud Metods
 - (void)showLibProgressOnView:(UIView *)pView andMessage:(NSString *) message {

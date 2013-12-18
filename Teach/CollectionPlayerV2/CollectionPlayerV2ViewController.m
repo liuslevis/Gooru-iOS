@@ -2,7 +2,7 @@
 //  CollectionPlayerV2ViewController.m
 // Gooru
 //
-//  Created by Gooru on 8/5/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -216,12 +216,14 @@ UIButton* btnOptionSelected;
     isTeacher = [[dictIncomingAppDetails valueForKey:@"isTeacher"] boolValue];
     shouldAutoloadNarration = [[dictIncomingAppDetails valueForKey:@"shouldAutoloadNarration"] boolValue];
     
+//    NSLog(@"dictAppDetails : %@",dictAppDetails);
+    
     return self;
     
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    
+
     
 }
 
@@ -235,7 +237,7 @@ UIButton* btnOptionSelected;
     //Question Attributed text view
     txtViewAttrQuestionText = [[DTAttributedTextView alloc] initWithFrame:CGRectMake(57, 96, 404, 300)];
     appDelegate = (AppDelegate*) [[UIApplication sharedApplication] delegate];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(relayoutRichTextViews:) name:@"DTAttributedTextContentViewDidFinishLayoutNotification" object:nil];
     
     isViewInitialized = FALSE;
@@ -247,7 +249,7 @@ UIButton* btnOptionSelected;
     
     [self.view addSubview:viewRCChooser];
     [viewRCChooser setHidden:TRUE];
-    
+
     [self loadNarrationSettings];
     
     [self getCollectionDetails];
@@ -255,7 +257,30 @@ UIButton* btnOptionSelected;
     
 }
 
+-(void)findNameWhenColumnIs:(int)columnNo andRowIs:(int)rowNo{
+    //Sid Example
+}
+
 - (void)dealloc{
+//    NSLog(@"Dealloc");
+//    
+//    carousel.dataSource = nil;
+//    carousel.delegate = nil;
+//    
+//    UIView* view = [carousel itemViewAtIndex:carousel.currentItemIndex];
+//    
+//    UIWebView* webview;
+//    
+//    for (UIView *aView in [view subviews]){
+//        if([aView isKindOfClass:[UIWebView class]]){
+//            webview = (UIWebView*)aView;
+//        }
+//    }
+//
+//    webview.delegate = nil;
+//    
+//    scrollNarrationOverlay.delegate = nil;
+//    lbYouTubePlayerViewController.delegate = nil;
     
     
 }
@@ -300,34 +325,42 @@ UIButton* btnOptionSelected;
     //Collection Title
     NSString* strServiceCollectionTitle = [results valueForKey:@"title"];
     strServiceCollectionTitle = [self ifString:strServiceCollectionTitle isNullReplaceWith:@"NA"];
+//    NSLog(@"strServiceCollectionTitle : %@",strServiceCollectionTitle);
     
     //Collection GooruOid
     NSString* strServiceCollectionId = [results valueForKey:@"gooruOid"];
     strServiceCollectionId = [self ifString:strServiceCollectionId isNullReplaceWith:@"NA"];
+//    NSLog(@"strServiceCollectionId : %@",strServiceCollectionId);
     
     //Collection Thumbnails
     NSString* strServiceCollectionThumbnail = [[results valueForKey:@"thumbnails"] valueForKey:@"url"];
     strServiceCollectionThumbnail = [self ifString:strServiceCollectionThumbnail isNullReplaceWith:@"NA"];
+//    NSLog(@"strServiceCollectionThumbnail : %@",strServiceCollectionThumbnail);
     
     //Collection Views
     NSString* strServiceCollectionViews = [results valueForKey:@"views"];
     strServiceCollectionViews = [self ifString:strServiceCollectionViews isNullReplaceWith:@"NA"];
+//    NSLog(@"strServiceCollectionViews : %@",strServiceCollectionViews);
     
     //Collection AssetURI
     NSString* strServiceAssetURI = [results valueForKey:@"assetURI"];
     strServiceAssetURI = [self ifString:strServiceAssetURI isNullReplaceWith:@"NA"];
+//    NSLog(@"strServiceAssetURI : %@",strServiceAssetURI);
     
     //Collection Folder
     NSString* strServiceFolder = [results valueForKey:@"folder"];
     strServiceFolder = [self ifString:strServiceFolder isNullReplaceWith:@"NA"];
+//    NSLog(@"strServiceFolder : %@",strServiceFolder);
     
     //Collection Native URL
     NSString* strServiceNativeURL = [results valueForKey:@"url"];
     strServiceNativeURL = [self ifString:strServiceNativeURL isNullReplaceWith:@"NA"];
+//    NSLog(@"strServiceNativeURL : %@",strServiceNativeURL);
     
     //Collection Description
     NSString* strServiceDescription = [results valueForKey:@"goals"];
     strServiceDescription = [self ifString:strServiceDescription isNullReplaceWith:@"NA"];
+//    NSLog(@"strServiceDescription : %@",strServiceDescription);
     
     [dictCollection setValue:strServiceCollectionTitle forKey:COLLECTION_TITLE];
     [dictCollection setValue:strServiceCollectionId forKey:COLLECTION_ID];
@@ -343,8 +376,8 @@ UIButton* btnOptionSelected;
     
     [dictCollection setValue:sessionToken forKey:SESSION_TOKEN];
     [dictCollection setValue:serverUrl forKey:SERVER_URL];
-    
-    
+
+
     
     
     //Populating Cover Page Items
@@ -355,6 +388,7 @@ UIButton* btnOptionSelected;
     //----------//
     //Resource Parsing
     NSArray* arrServiceCollectionItem = [results valueForKey:@"collectionItems"];
+    //    NSLog(@"arrServiceCollectionItem : %@",arrServiceCollectionItem);
     
     int countArrServiceCollectionItem = [arrServiceCollectionItem count];
     
@@ -435,9 +469,9 @@ UIButton* btnOptionSelected;
             //Check for resource types and adjust
             
             //Checking if asset uri and folder have to be appended
-            
+       
             if ([strServiceResourceUrl rangeOfString:@"http://"].location == NSNotFound) {
-                
+            
                 strServiceResourceUrl = [NSString stringWithFormat:@"%@%@%@",strServiceResourceAssetUri,strServiceResourceFolder,strServiceResourceUrl];
             }
             //Checking for google viewer formats [str_newnativeUrl hasSuffix:@".pdf"]||
@@ -446,8 +480,9 @@ UIButton* btnOptionSelected;
                 strServiceResourceUrl = [NSString stringWithFormat:@"http://docs.google.com/viewer?url=%@&embedded=true",strServiceResourceUrl];
                 
             }
-            
+         
             //checking if youtube and adjusting start stop times using Resource Type
+//            if ([strServiceResourceType isEqualToString:@"video/youtube"]) {
             if ([strServiceResourceUrl rangeOfString:@"youtube.com/"].location != NSNotFound) {
                 if (![strServiceResourceTimeStart isEqualToString:@"NA"]) {
                     strServiceResourceTimeStart = [self computeTimeInSecondsFor:strServiceResourceTimeStart];
@@ -467,8 +502,8 @@ UIButton* btnOptionSelected;
                 
                 strServiceResourceThumbnail = [NSString stringWithFormat:@"%@%@%@",strServiceResourceAssetUri,strServiceResourceFolder,strServiceResourceAssetName];
             }
-            
-            
+
+                    
             NSArray* arrServiceAnswers = [[NSArray alloc] init];
             NSString* strServiceQuestionText = [[NSString alloc] init];
             NSArray* arrServiceHints = [[NSArray alloc] init];
@@ -476,6 +511,8 @@ UIButton* btnOptionSelected;
             NSString* strServiceQuestionType = [[NSString alloc] init];
             
             if ([strServiceResourceCategory isEqualToString:@"Question"]) {
+//                strServiceResourceTitle = @"Question";
+                
                 //Answer Array
                 arrServiceAnswers = [strServiceResource valueForKey:@"answers"];
                 
@@ -523,8 +560,6 @@ UIButton* btnOptionSelected;
             [dictResourceInstance setValue:@"Invalid" forKey:QUESTION_USERANSWER];
             [dictResourceInstance setValue:@"Invalid" forKey:QUESTION_TYPE];
             
-            [self getReactionsforResource:strServiceResourceActualId];
-            
             [dictResourceInstance setValue:@"NA" forKey:RESOURCE_REACTION];
             
             //Check for Question
@@ -547,6 +582,8 @@ UIButton* btnOptionSelected;
             
         }
         
+        //        NSLog(@"dictAllResources : %@",[dictAllResources description]);
+        
     }
     
     [btnStartCollection setEnabled:TRUE];
@@ -565,6 +602,8 @@ UIButton* btnOptionSelected;
     [self shouldHideView:viewCoverPage :TRUE];
     
     [self shouldShowReactions:TRUE];
+    
+    [appDelegate logMixpanelforevent:@"Tap Study" and:nil];
     
 }
 
@@ -626,7 +665,7 @@ UIButton* btnOptionSelected;
     }else{
         [carousel setScrollEnabled:FALSE];
     }
-    
+ 
 }
 
 
@@ -643,6 +682,9 @@ UIButton* btnOptionSelected;
 - (void)carouselCurrentItemIndexDidChange:(iCarousel *)carousel{
     
     NSLog(@"index did change index : %i",carousel.currentItemIndex);
+    
+//    UIView* view = [carousel itemViewAtIndex:carousel.currentItemIndex];
+//    [self renderResourceOnView:view];
     
     
 }
@@ -681,6 +723,22 @@ UIButton* btnOptionSelected;
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
+    NSLog(@"index : %i",index);
+    //    UILabel *label = nil;
+    //    UIWebView* webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 1024, 748)];
+    
+    //create new view if no view is available for recycling
+    if (view != nil)
+    {
+        //        [[[carousel itemViewAtIndex:previousIndex] subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
+        
+    }
+    else
+    {
+        //        [[[carousel itemViewAtIndex:previousIndex] subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    }
+    
     //set item label
     //remember to always set any properties of your carousel item
     //views outside of the `if (view == nil) {...}` check otherwise
@@ -698,6 +756,11 @@ UIButton* btnOptionSelected;
     [activityIndicatorResourceLoad setHidesWhenStopped:TRUE];
     [activityIndicatorResourceLoad startAnimating];
     [view addSubview:activityIndicatorResourceLoad];
+    //    [view addSubview:webView];
+    //    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=XTcr1-eQr1Q"]]];
+//    if(index == 0){
+//        [self renderResourceOnView:view];
+//    }
     
     return view;
 }
@@ -724,7 +787,7 @@ UIButton* btnOptionSelected;
             
             for (UIView *aView in [[carousel itemViewAtIndex:previousIndex] subviews]){
                 if([aView isKindOfClass:[UIWebView class]]){
-                    webview = (UIWebView*)aView;
+                        webview = (UIWebView*)aView;
                 }
             }
             webview.delegate = nil;
@@ -765,13 +828,21 @@ UIButton* btnOptionSelected;
     
     [lblResourceTitle setText:[dictCurrentResourceInfo valueForKey:RESOURCE_TITLE]];
     
-    lblResourceTitle.frame = [self getWLabelFrameForLabel:lblResourceTitle withString:lblResourceTitle.text];
+    CGRect frame;
+   frame = [self getWLabelFrameForLabel:lblResourceTitle withString:lblResourceTitle.text];
+    if (frame.size.width>764) {
+        lblResourceTitle.frame=CGRectMake(lblResourceTitle.frame.origin.x, lblResourceTitle.frame.origin.y, 764, lblResourceTitle.frame.size.height);
+       
+    }else{
+       lblResourceTitle.frame=CGRectMake(lblResourceTitle.frame.origin.x, lblResourceTitle.frame.origin.y,frame.size.width, lblResourceTitle.frame.size.height);
+    }
     
     activityIndicatorResourceLoading.frame = CGRectMake(lblResourceTitle.frame.origin.x + lblResourceTitle.frame.size.width + 15, activityIndicatorResourceLoading.frame.origin.y, activityIndicatorResourceLoading.frame.size.width, activityIndicatorResourceLoading.frame.size.height);
     
     [activityIndicatorResourceLoading startAnimating];
     
     if ([[dictCurrentResourceInfo valueForKey:RESOURCE_CATEGORY] isEqualToString:@"Video"]) {
+//        if ([[dictResourceInfo valueForKey:RESOURCE_TYPE] isEqualToString:@"video/youtube"]) {
         if ([[dictCurrentResourceInfo valueForKey:RESOURCE_URL] rangeOfString:@"youtube.com/"].location != NSNotFound){
             
             
@@ -813,7 +884,7 @@ UIButton* btnOptionSelected;
             
             [self hideWebviewControls:TRUE];
             
-        }
+            }
             break;
             
         case 2:{
@@ -823,7 +894,7 @@ UIButton* btnOptionSelected;
             flagLaunchVideoOnNarrationDismiss = FALSE;
             [self hideWebviewControls:TRUE];
             
-        }
+            }
             break;
             
         case 3:{
@@ -840,15 +911,16 @@ UIButton* btnOptionSelected;
             webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
             
             [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[dictCurrentResourceInfo valueForKey:RESOURCE_URL]]]];
-            
+       
             webView.scalesPageToFit = YES;
             
             NSLog(@"webview : %@",[webView description]);
             
             [view insertSubview:webView belowSubview:viewNarrationOverlay];
+//            [view addSubview:webView];
             
             [self updateWebviewControlFor:webView];
-            
+
         }
             break;
             
@@ -860,13 +932,13 @@ UIButton* btnOptionSelected;
     view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     
     [self populateNarrationOverlay:view withNarration:[dictCurrentResourceInfo valueForKey:RESOURCE_NARRATION]];
-    
-    
+        
+
     
     
 }
 
-#pragma mark Reload Resource on Carousel View
+#pragma mark Reload Resource on Carousel View 
 - (void)reloadResourceOnView:(UIView*)view{
     
     [self manageSelector];
@@ -888,13 +960,22 @@ UIButton* btnOptionSelected;
     
     [lblResourceTitle setText:[dictCurrentResourceInfo valueForKey:RESOURCE_TITLE]];
     
-    lblResourceTitle.frame = [self getWLabelFrameForLabel:lblResourceTitle withString:lblResourceTitle.text];
+    
+    CGRect frame;
+    frame = [self getWLabelFrameForLabel:lblResourceTitle withString:lblResourceTitle.text];
+    if (frame.size.width>764) {
+        lblResourceTitle.frame=CGRectMake(lblResourceTitle.frame.origin.x, lblResourceTitle.frame.origin.y, 764, lblResourceTitle.frame.size.height);
+        
+    }else{
+        lblResourceTitle.frame=CGRectMake(lblResourceTitle.frame.origin.x, lblResourceTitle.frame.origin.y,frame.size.width, lblResourceTitle.frame.size.height);
+    }
     
     activityIndicatorResourceLoading.frame = CGRectMake(lblResourceTitle.frame.origin.x + lblResourceTitle.frame.size.width + 15, activityIndicatorResourceLoading.frame.origin.y, activityIndicatorResourceLoading.frame.size.width, activityIndicatorResourceLoading.frame.size.height);
     
     [activityIndicatorResourceLoading startAnimating];
     
     if ([[dictCurrentResourceInfo valueForKey:RESOURCE_CATEGORY] isEqualToString:@"Video"]) {
+        //        if ([[dictResourceInfo valueForKey:RESOURCE_TYPE] isEqualToString:@"video/youtube"]) {
         if ([[dictCurrentResourceInfo valueForKey:RESOURCE_URL] rangeOfString:@"youtube.com/"].location != NSNotFound){
             
             
@@ -921,9 +1002,9 @@ UIButton* btnOptionSelected;
     switch (launchSwitch) {
         case 1:{
             NSLog(@"LBYoutube launch emminent!");
-            
+
             [self loadYouTubePlayerOn:view withURL:[NSURL URLWithString:[dictCurrentResourceInfo valueForKey:RESOURCE_URL]] withStartTime:[[dictCurrentResourceInfo valueForKey:RESOURCE_START] intValue] andStopTime:[[dictCurrentResourceInfo valueForKey:RESOURCE_STOP] intValue]];
-            
+
         }
             break;
             
@@ -946,11 +1027,13 @@ UIButton* btnOptionSelected;
             webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
             
             [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[dictCurrentResourceInfo valueForKey:RESOURCE_URL]]]];
+            //    webView.delegate = self;
             webView.scalesPageToFit = YES;
             
             NSLog(@"webview : %@",[webView description]);
             
             [view insertSubview:webView belowSubview:viewNarrationOverlay];
+            //            [view addSubview:webView];
             
             [viewNarrationOverlay bringSubviewToFront:webView];
             
@@ -963,6 +1046,10 @@ UIButton* btnOptionSelected;
     
     
     view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    
+    
+    
+
     
 }
 
@@ -1019,15 +1106,25 @@ UIButton* btnOptionSelected;
     [scrollNarrationOverlay addSubview:viewNarrationOverlayChild];
     [scrollNarrationOverlay setContentSize:CGSizeMake(viewNarrationOverlayChild.frame.size.width, viewNarrationOverlayChild.frame.size.height *2)];
     
+    
+    
+//    [view addSubview:viewNarrationOverlay];
     [viewNarrationOverlay setHidden:TRUE];
+    
+    
+    //    lblNarrationOverlay.frame = CGRectMake(18, 188, 985, 100);
+    
     
     lblNarrationOverlay.backgroundColor = [UIColor clearColor];
     strNarration = [strNarration stripHtml];
     lblNarrationOverlay.text = strNarration;
     
+    //    [lblNarrationOverlay setBackgroundColor:[UIColor yellowColor]];
     [lblNarrationOverlay setTextAlignment:NSTextAlignmentCenter];
     
     [lblNarrationOverlay setNumberOfLines:0];
+    
+    //    lblNarrationOverlay.frame = [self getHLabelFrameForLabel:lblNarrationOverlay withString:strNarration];
     
     if (!isTeacher && !isAnonymous) {
         [viewNarrationOverlayChild setBackgroundColor:narrationBackgroundColor];
@@ -1048,7 +1145,7 @@ UIButton* btnOptionSelected;
             [btnNarration sendActionsForControlEvents:UIControlEventTouchUpInside];
         }else{
             [btnNarration setEnabled:FALSE];
-            
+
         }
         
         
@@ -1063,7 +1160,7 @@ UIButton* btnOptionSelected;
             
         }
         
-        
+       
     }
     
 }
@@ -1074,6 +1171,8 @@ UIButton* btnOptionSelected;
     if ([viewNarrationOverlay isHidden]) {
         [viewNarrationOverlay setHidden:FALSE];
         
+        
+//        [scrollNarrationOverlay scrollRectToVisible:CGRectMake(0, scrollNarrationOverlay.contentSize.height/2, scrollNarrationOverlay.frame.size.width, scrollNarrationOverlay.frame.size.height) animated:NO];
         [btnNarration setSelected:TRUE];
         [scrollNarrationOverlay scrollRectToVisible:CGRectMake(0, 0, scrollNarrationOverlay.frame.size.width, scrollNarrationOverlay.frame.size.height) animated:YES];
         
@@ -1096,7 +1195,7 @@ UIButton* btnOptionSelected;
             flagLaunchVideoOnNarrationDismiss = FALSE;
         }else{
             
-            [self playVideoPlayerForIndex:carousel.currentItemIndex];
+           [self playVideoPlayerForIndex:carousel.currentItemIndex];
             
         }
         
@@ -1108,7 +1207,8 @@ UIButton* btnOptionSelected;
 - (IBAction)btnActionNarration:(id)sender{
     
     [[carousel itemViewAtIndex:carousel.currentItemIndex] addSubview:viewNarrationOverlay];
-    
+    [appDelegate logMixpanelforevent:@"Tap Narration" and:nil];
+
     [self manageNarrationOverlay];
     
 }
@@ -1116,7 +1216,7 @@ UIButton* btnOptionSelected;
 
 #pragma mark - ScrollView Delegate -
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    
+
     NSLog(@"Content Offset : %f",scrollView.contentOffset.y);
     if (scrollView.contentOffset.y == 660) {
         [viewNarrationOverlay setHidden:TRUE];
@@ -1140,6 +1240,8 @@ UIButton* btnOptionSelected;
 #pragma mark BA Navigation Drawer
 -(IBAction)btnActionNavigation:(id)sender{
     
+        [appDelegate logMixpanelforevent:@"Tap Navigation" and:nil];
+        
     viewNavigation.frame = CGRectMake(viewNavigation.frame.origin.x, viewNavigation.frame.origin.y, viewNavigation.frame.size.width, viewNavigation.frame.size.height);
     
     
@@ -1152,11 +1254,11 @@ UIButton* btnOptionSelected;
         viewNavigation.frame = CGRectMake(viewNavigation.frame.origin.x, viewNavigation.frame.origin.y + viewNavigation.frame.size.height + 44, viewNavigation.frame.size.width, viewNavigation.frame.size.height);
         [btnNavigation setSelected:TRUE];
         [self shouldHideView:viewNavigationOverlayChild :FALSE];
-        
+
     }else{
         
         viewNavigation.frame = CGRectMake(viewNavigation.frame.origin.x, viewNavigation.frame.origin.y - viewNavigation.frame.size.height - 44, viewNavigation.frame.size.width, viewNavigation.frame.size.height);
-        
+
         [btnNavigation setSelected:FALSE];
         [self shouldHideView:viewNavigationOverlayChild :TRUE];
     }
@@ -1164,7 +1266,7 @@ UIButton* btnOptionSelected;
     [UIView commitAnimations];
     
     
-    
+   
 }
 
 -(void)unhideView{
@@ -1175,15 +1277,15 @@ UIButton* btnOptionSelected;
         viewNavigationOverlayChild.hidden = FALSE;
         
     }
-    
+
     
 }
 
 #pragma mark Populate Navigation Drawer
 -(void)populateNavigationDrawer{
     
-    if (!isViewInitialized) {
-        
+     if (!isViewInitialized) {
+    
         UIButton* btnCollectionHome = [[UIButton alloc] init];
         btnCollectionHome.frame = CGRectMake(17, 15, 120, 90);
         [btnCollectionHome setBackgroundColor:[UIColor clearColor]];
@@ -1242,7 +1344,7 @@ UIButton* btnOptionSelected;
             
             btnNavigateResources.tag = [requiredKey intValue]*MULTIPLIER_RESOURCE_NAVIGATION;
             [btnNavigateResources addTarget:self action:@selector(btnActionNavigateResources:) forControlEvents:UIControlEventTouchUpInside];
-            
+
             
             //Populating labels
             UILabel* lbl_resourceLabel = [[UILabel alloc] init];
@@ -1274,43 +1376,43 @@ UIButton* btnOptionSelected;
             
             
         }
+         
+         
+         //End Screen Item
+         lastXordinate = lastXordinate + 8;
+         
+         UIButton* btnCollectionEnd = [[UIButton alloc] init];
+         btnCollectionEnd.frame = CGRectMake(lastXordinate, 15, 120, 90);
+         [btnCollectionEnd setBackgroundColor:[UIColor clearColor]];
+         
+         [btnCollectionEnd addTarget:self action:@selector(btnActionNavigationEndScreen:) forControlEvents:UIControlEventTouchUpInside];
+         
+         UILabel* lblCollectionEnd = [[UILabel alloc] init];
+         lblCollectionEnd.frame = CGRectMake(0, 0, btnCollectionHome.frame.size.width, btnCollectionHome.frame.size.height);
+         [lblCollectionEnd setBackgroundColor:[UIColor blackColor]];
+         [lblCollectionEnd setText:@"Collection\nEnd"];
+         [lblCollectionEnd setFont:[UIFont fontWithName:@"Arial" size: 12.0]];
+         [lblCollectionEnd setTextColor:[UIColor whiteColor]];
+         [lblCollectionEnd setTextAlignment:NSTextAlignmentCenter];
+         [lblCollectionEnd setNumberOfLines:0];
+         
+         
+         [btnCollectionEnd addSubview:lblCollectionEnd];
+         [scrollNavigation addSubview:btnCollectionEnd];
+         
+         
+         lastXordinate = lastXordinate + 130;
+         
+         [scrollNavigation setContentSize:CGSizeMake(lastXordinate,scrollNavigation.frame.size.height)];
+         
+         isViewInitialized = TRUE;
+         
         
-        
-        //End Screen Item
-        lastXordinate = lastXordinate + 8;
-        
-        UIButton* btnCollectionEnd = [[UIButton alloc] init];
-        btnCollectionEnd.frame = CGRectMake(lastXordinate, 15, 120, 90);
-        [btnCollectionEnd setBackgroundColor:[UIColor clearColor]];
-        
-        [btnCollectionEnd addTarget:self action:@selector(btnActionNavigationEndScreen:) forControlEvents:UIControlEventTouchUpInside];
-        
-        UILabel* lblCollectionEnd = [[UILabel alloc] init];
-        lblCollectionEnd.frame = CGRectMake(0, 0, btnCollectionHome.frame.size.width, btnCollectionHome.frame.size.height);
-        [lblCollectionEnd setBackgroundColor:[UIColor blackColor]];
-        [lblCollectionEnd setText:@"Collection\nEnd"];
-        [lblCollectionEnd setFont:[UIFont fontWithName:@"Arial" size: 12.0]];
-        [lblCollectionEnd setTextColor:[UIColor whiteColor]];
-        [lblCollectionEnd setTextAlignment:NSTextAlignmentCenter];
-        [lblCollectionEnd setNumberOfLines:0];
-        
-        
-        [btnCollectionEnd addSubview:lblCollectionEnd];
-        [scrollNavigation addSubview:btnCollectionEnd];
-        
-        
-        lastXordinate = lastXordinate + 130;
-        
-        [scrollNavigation setContentSize:CGSizeMake(lastXordinate,scrollNavigation.frame.size.height)];
-        
-        isViewInitialized = TRUE;
-        
-        
-    }else{
-        
-        
-        
-    }
+     }else{
+         
+         
+         
+     }
     
 }
 
@@ -1349,7 +1451,7 @@ UIButton* btnOptionSelected;
     tag = tag/MULTIPLIER_RESOURCE_NAVIGATION;
     tag = tag - TAG_RESOURCE_ADDITIVE;
     tag = tag/TAG_RESOURCE_MULTIPLIER;
-    
+
     if (tag != carousel.currentItemIndex) {
         previousIndex = carousel.currentItemIndex;
         [carousel scrollToItemAtIndex:tag animated:YES];
@@ -1371,13 +1473,19 @@ UIButton* btnOptionSelected;
     [UIView setAnimationDelegate:self];
     
     if (carousel.currentItemIndex == [dictAllResources count]) {
-        
+
         viewSelector.frame = CGRectMake(carousel.currentItemIndex*NAV_X_ITEM_RECURRANCE + NAV_X_SCROLLOFFSET, viewSelector.frame.origin.y, NAV_SELECTOR_WIDTH_FOR_END, viewSelector.frame.size.height);
     }else{
         viewSelector.frame = CGRectMake(carousel.currentItemIndex*NAV_X_ITEM_RECURRANCE + NAV_X_SCROLLOFFSET, viewSelector.frame.origin.y, NAV_SELECTOR_WIDTH, viewSelector.frame.size.height);
     }
     
+    
+    
+    
+    
     [UIView commitAnimations];
+    
+    
     
     //Auto scroll to keep selector in view
     
@@ -1391,17 +1499,34 @@ UIButton* btnOptionSelected;
     }
     
     
+    //    if(currentPage%7 == 0){
+    //
+    //            [scroll_navigationScroll scrollRectToVisible:CGRectMake(scroll_navigationScroll.frame.origin.x, MIN(scroll_navigationScroll.contentSize.height,currentPage*110), scroll_navigationScroll.frame.size.width, scroll_navigationScroll.frame.size.height) animated:YES];
+    //        }
+    
+    //    if(previousPage>currentPage){
+    //        if(currentPage%6 == 0){
+    //            if(scroll_navigationScroll.contentOffset.y+748>scroll_navigationScroll.contentSize.height){
+    //                [scroll_navigationScroll scrollRectToVisible:CGRectMake(scroll_navigationScroll.frame.origin.x, view_selector.frame.origin.x-748-110, scroll_navigationScroll.frame.size.width, scroll_navigationScroll.frame.size.height) animated:YES];
+    //            }else{
+    //                [scroll_navigationScroll scrollRectToVisible:CGRectMake(scroll_navigationScroll.frame.origin.x, currentPage*110-7*110, scroll_navigationScroll.frame.size.width, scroll_navigationScroll.frame.size.height) animated:YES];
+    //            }
+    //
+    //        }
+    //    }
+    
 }
 
 #pragma mark - Youtube Loader -
 -(void)loadYouTubePlayerOn:(UIView*)view withURL:(NSURL*)url withStartTime:(int)startTime andStopTime:(int)stopTime{
     
+//    [appDelegate showLibProgressOnView:self.view andMessage:@"Loading your video.."];
     
     NSLog(@"loadYouTubePlayer for url : %@",url);
     
     lbYouTubePlayerViewController = [[LBYouTubePlayerViewController alloc] initWithYouTubeURL:url quality:LBYouTubeVideoQualityLarge];
     lbYouTubePlayerViewController.delegate = self;
-    
+
     if (startTime !=0) {
         lbYouTubePlayerViewController.startTime=startTime;
     }
@@ -1410,6 +1535,8 @@ UIButton* btnOptionSelected;
         lbYouTubePlayerViewController.endTime=stopTime;
     }
     
+    
+    //    self.controller.view.center = webView.center;
     
     //Setting dimensions for youtube player
     CGRect frame;
@@ -1420,7 +1547,7 @@ UIButton* btnOptionSelected;
     
     lbYouTubePlayerViewController.view.frame = frame;
     [lbYouTubePlayerViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
-    
+
     
     [view insertSubview:lbYouTubePlayerViewController.view belowSubview:viewNarrationOverlay];
     [viewNarrationOverlay bringSubviewToFront:lbYouTubePlayerViewController.view];
@@ -1430,7 +1557,7 @@ UIButton* btnOptionSelected;
 -(void)youTubePlayerViewController:(LBYouTubePlayerViewController *)controller didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
     NSLog(@"youTubePlayerViewController Did extract video source:%@", videoURL);
     [activityIndicatorResourceLoading stopAnimating];
-    
+
 }
 
 -(void)youTubeExtractor:(LBYouTubeExtractor *)extractor didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL{
@@ -1463,7 +1590,7 @@ UIButton* btnOptionSelected;
         if (range.length > 0) {
             [lbYouTubePlayerViewController.view pauseVideo];
         }
-        
+
     }
 }
 
@@ -1502,6 +1629,11 @@ UIButton* btnOptionSelected;
         [aView removeFromSuperview];
     }
     
+    //Question Text
+    
+    //    lblQuestionText.frame = [self getHLabelFrameForLabel:lblQuestionText withString:[arrQuestionData objectAtIndex:GET_RESOURCE_QUESTIONTEXT]];
+    //    [lblQuestionText setHidden:TRUE];
+    
     NSData *data = [[dictQuestionData valueForKey:QUESTION_TEXT] dataUsingEncoding:NSUTF8StringEncoding];
     
     NSLog(@"image data to string : %@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
@@ -1524,6 +1656,8 @@ UIButton* btnOptionSelected;
     
     [txtViewAttrQuestionText setAttributedString:attrString];
     
+    
+    //    [txtViewAttrQuestionText setBackgroundColor:[UIColor yellowColor]];
     
     CGSize size = [txtViewAttrQuestionText.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:txtViewAttrQuestionText.frame.size.width];
     
@@ -1551,6 +1685,11 @@ UIButton* btnOptionSelected;
     
     [self setUpHintsAndExplanationWithHintsData:[dictQuestionData valueForKey:QUESTION_HINTS] andExplanationData:[dictQuestionData valueForKey:QUESTION_EXPLANATION]];
     
+    //Answer Text
+    
+//    NSArray* keys = [self sortedIntegerKeysForDictionary:dictAllResources];
+//    NSString* requiredKey = [keys objectAtIndex:carousel.currentItemIndex];
+    
     NSArray* arrAnswers = [dictQuestionData valueForKey:QUESTION_ANSWERS];
     int sizeArrAnswers = [arrAnswers count];
     noOfOptions = sizeArrAnswers;
@@ -1575,13 +1714,13 @@ UIButton* btnOptionSelected;
             
             [dictQuestionData setValue:@"NA" forKey:QUESTION_USERANSWER];
             [txtViewOEAnswer setDelegate:self];
-            
+                        
             [txtViewOEAnswer setText:@""];
             [txtViewOEAnswer setEditable:TRUE];
             [btnOESubmit setHidden:FALSE];
             
             
-            
+           
         }
         
     }else{
@@ -1600,16 +1739,19 @@ UIButton* btnOptionSelected;
         
         NSLog(@"arrAnswers : %@",[arrAnswers objectAtIndex:i]);
         
+        //Populating answer text in labels
+        //[[[arrAnswers objectAtIndex:i] valueForKey:@"sequence"] intValue]
+        
         //Resetting User Answer
         if (!forSummaryPage) {
             [dictQuestionData setValue:@"NA" forKey:QUESTION_USERANSWER];
-            
+
         }
-        
+                
         switch (i+1) {
                 
                 
-                
+            
             case 1:{
                 NSLog(@"Option 1");
                 
@@ -1617,7 +1759,7 @@ UIButton* btnOptionSelected;
                 viewOption.hidden = false;
                 
                 btnCheckAnswer.frame = CGRectMake(btnCheckAnswer.frame.origin.x, viewOption.frame.origin.y + viewOption.frame.size.height + 25, btnCheckAnswer.frame.size.width, btnCheckAnswer.frame.size.height);
-                
+
                 UILabel* lblOption1 = (UILabel*)[viewOption viewWithTag:11*MULTIPLIER_ANSWER_TEXT+ADDITIVE_ANSWER_TEXT_LABEL];
                 [lblOption1 setText:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"]];
                 
@@ -1632,6 +1774,9 @@ UIButton* btnOptionSelected;
                 if (frameToSet.size.height > 58) {
                     viewOption.frame = frameToSet;
                 }
+                
+                //                [viewOption setBackgroundColor:[UIColor blueColor]];
+                
                 
                 //Set proper validator image proper images to button states
                 UIImageView* imgValidator = (UIImageView*)[viewOption viewWithTag:11*MULTIPLIER_VALIDATOR];
@@ -1650,9 +1795,9 @@ UIButton* btnOptionSelected;
                     [btnOption setHidden:FALSE];
                     
                 }
+
                 
-                
-                
+ 
                 if ([[[arrAnswers objectAtIndex:i] valueForKey:@"isCorrect"] intValue] == 1) {
                     [imgValidator setImage:[UIImage imageNamed:@"correct@2x.png"]];
                     [btnOption setImage:[UIImage imageNamed:@"btnOptionSelected.png"] forState:UIControlStateSelected];
@@ -1677,6 +1822,7 @@ UIButton* btnOptionSelected;
                     
                 }else{
                     [imgValidator setImage:[UIImage imageNamed:@"incorrect@2x.png"]];
+//                    [btnOption setImage:[UIImage imageNamed:@"btnOptionSelected.png"] forState:UIControlStateSelected];
                     [btnOption setTitle:@"0" forState:UIControlStateNormal];
                     
                     if (forSummaryPage) {
@@ -1720,13 +1866,15 @@ UIButton* btnOptionSelected;
                     viewOption.frame = frameToSet;
                 }
                 
+                //                [viewOption setBackgroundColor:[UIColor blueColor]];
+                
                 //Set proper validator image proper images to button states
                 UIImageView* imgValidator = (UIImageView*)[viewOption viewWithTag:22*MULTIPLIER_VALIDATOR];
                 UIButton* btnOption = (UIButton*)[viewOption viewWithTag:22*MULTIPLIER_OPTION_BTN];
                 
                 //Experimental centering
                 [txtViewAttrOption setCenter:CGPointMake(txtViewAttrOption.center.x, btnOption.center.y)];
-                
+            
                 UILabel* lblLetter = (UILabel*)[viewOption viewWithTag:111];
                 [lblLetter setTextColor:[UIColor colorWithRed:81.0/255.0 green:81.0/255.0 blue:81.0/255.0 alpha:1]];
                 
@@ -1737,11 +1885,12 @@ UIButton* btnOptionSelected;
                     [btnOption setHidden:FALSE];
                     
                 }
-                
-                
+
+
                 
                 if ([[[arrAnswers objectAtIndex:i] valueForKey:@"isCorrect"] intValue] == 1) {
                     [imgValidator setImage:[UIImage imageNamed:@"correct@2x.png"]];
+//                    [btnOption setImage:[UIImage imageNamed:@"btnOptionSelected.png"] forState:UIControlStateSelected];
                     [btnOption setTitle:@"1" forState:UIControlStateNormal];
                     
                     if (forSummaryPage) {
@@ -1750,10 +1899,11 @@ UIButton* btnOptionSelected;
                         [imgValidator setHidden:FALSE];
                         
                     }
-                    
+
                     
                     if ([[dictQuestionData valueForKey:QUESTION_CORRECTANSWER] isEqual:@"NA"]) {
                         NSLog(@"dictQuestionData before: %@",[dictQuestionData description]);
+                        //                        [arrQuestionData insertObject:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"] atIndex:GET_RESOURCE_RIGHTANSWER];
                         
                         [dictQuestionData setValue:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"] forKey:QUESTION_CORRECTANSWER];
                         
@@ -1764,6 +1914,7 @@ UIButton* btnOptionSelected;
                     
                 }else{
                     [imgValidator setImage:[UIImage imageNamed:@"incorrect@2x.png"]];
+//                    [btnOption setImage:[UIImage imageNamed:@"btnOptionSelected.png"] forState:UIControlStateSelected];
                     [btnOption setTitle:@"0" forState:UIControlStateNormal];
                     
                     if (forSummaryPage) {
@@ -1808,6 +1959,7 @@ UIButton* btnOptionSelected;
                     viewOption.frame = frameToSet;
                 }
                 
+                //                [viewOption setBackgroundColor:[UIColor blueColor]];
                 
                 //Set proper validator image proper images to button states
                 UIImageView* imgValidator = (UIImageView*)[viewOption viewWithTag:33*MULTIPLIER_VALIDATOR];
@@ -1826,8 +1978,8 @@ UIButton* btnOptionSelected;
                     [btnOption setHidden:FALSE];
                     
                 }
-                
-                
+
+
                 
                 if ([[[arrAnswers objectAtIndex:i] valueForKey:@"isCorrect"] intValue] == 1) {
                     [imgValidator setImage:[UIImage imageNamed:@"correct@2x.png"]];
@@ -1844,6 +1996,7 @@ UIButton* btnOptionSelected;
                     
                     if ([[dictQuestionData valueForKey:QUESTION_CORRECTANSWER] isEqual:@"NA"]) {
                         NSLog(@"dictQuestionData before: %@",[dictQuestionData description]);
+                        //                        [arrQuestionData insertObject:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"] atIndex:GET_RESOURCE_RIGHTANSWER];
                         
                         [dictQuestionData setValue:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"] forKey:QUESTION_CORRECTANSWER];
                         
@@ -1877,7 +2030,7 @@ UIButton* btnOptionSelected;
                 
                 UIView* viewOption = (UIView*)[scrollViewQuestionRhs viewWithTag:44];
                 viewOption.hidden = false;
-                
+
                 
                 btnCheckAnswer.frame = CGRectMake(btnCheckAnswer.frame.origin.x, viewOption.frame.origin.y + viewOption.frame.size.height + 25, btnCheckAnswer.frame.size.width, btnCheckAnswer.frame.size.height);
                 
@@ -1896,6 +2049,8 @@ UIButton* btnOptionSelected;
                     viewOption.frame = frameToSet;
                 }
                 
+                //                [viewOption setBackgroundColor:[UIColor blueColor]];
+                
                 //Set proper validator image proper images to button states
                 UIImageView* imgValidator = (UIImageView*)[viewOption viewWithTag:44*MULTIPLIER_VALIDATOR];
                 UIButton* btnOption = (UIButton*)[viewOption viewWithTag:44*MULTIPLIER_OPTION_BTN];
@@ -1913,7 +2068,7 @@ UIButton* btnOptionSelected;
                     [btnOption setHidden:FALSE];
                     
                 }
-                
+
                 
                 if ([[[arrAnswers objectAtIndex:i] valueForKey:@"isCorrect"] intValue] == 1) {
                     [imgValidator setImage:[UIImage imageNamed:@"correct@2x.png"]];
@@ -1929,6 +2084,7 @@ UIButton* btnOptionSelected;
                     
                     if ([[dictQuestionData valueForKey:QUESTION_CORRECTANSWER] isEqual:@"NA"]) {
                         NSLog(@"dictQuestionData before: %@",[dictQuestionData description]);
+                        //                        [arrQuestionData insertObject:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"] atIndex:GET_RESOURCE_RIGHTANSWER];
                         
                         [dictQuestionData setValue:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"] forKey:QUESTION_CORRECTANSWER];
                         
@@ -1960,7 +2116,7 @@ UIButton* btnOptionSelected;
                 
                 UIView* viewOption = (UIView*)[scrollViewQuestionRhs viewWithTag:55];
                 viewOption.hidden = false;
-                
+
                 
                 btnCheckAnswer.frame = CGRectMake(btnCheckAnswer.frame.origin.x, viewOption.frame.origin.y + viewOption.frame.size.height + 25, btnCheckAnswer.frame.size.width, btnCheckAnswer.frame.size.height);
                 
@@ -1979,6 +2135,7 @@ UIButton* btnOptionSelected;
                     viewOption.frame = frameToSet;
                 }
                 
+                //                [viewOption setBackgroundColor:[UIColor blueColor]];
                 
                 //Set proper validator image proper images to button states
                 UIImageView* imgValidator = (UIImageView*)[viewOption viewWithTag:55*MULTIPLIER_VALIDATOR];
@@ -1997,7 +2154,7 @@ UIButton* btnOptionSelected;
                     [btnOption setHidden:FALSE];
                     
                 }
-                
+
                 
                 if ([[[arrAnswers objectAtIndex:i] valueForKey:@"isCorrect"] intValue] == 1) {
                     [imgValidator setImage:[UIImage imageNamed:@"correct@2x.png"]];
@@ -2013,6 +2170,8 @@ UIButton* btnOptionSelected;
                     
                     if ([[dictQuestionData valueForKey:QUESTION_CORRECTANSWER] isEqual:@"NA"]) {
                         NSLog(@"dictQuestionData before: %@",[dictQuestionData description]);
+                        //                        [arrQuestionData insertObject:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"] atIndex:GET_RESOURCE_RIGHTANSWER];
+                        
                         [dictQuestionData setValue:[[arrAnswers objectAtIndex:i] valueForKey:@"answerText"] forKey:QUESTION_CORRECTANSWER];
                         
                         NSLog(@"dictQuestionData after: %@",[dictQuestionData description]);
@@ -2047,12 +2206,19 @@ UIButton* btnOptionSelected;
         [dictAllResources setObject:dictQuestionData forKey:requiredKey];
     }
     
+//    lbl_WVControl_resourceTitle.text = [arrQuestionData objectAtIndex:GET_RESOURCE_LABEL];
+    
     view_Question.frame = CGRectMake(0, 0, view_Question.frame.size.width, view.frame.size.height);
+    
+    if (forSummaryPage) {
+//        view_Question.frame = CGRectMake(0, 37, view.frame.size.width, view.frame.size.height);
+    }
+//    [view addSubview:view_Question];
     
     [view insertSubview:view_Question belowSubview:viewNarrationOverlay];
     
     [viewNarrationOverlay bringSubviewToFront:view_Question];
-    
+
     
     [activityIndicatorResourceLoading stopAnimating];
     
@@ -2079,12 +2245,36 @@ UIButton* btnOptionSelected;
                                      DTUseiOS6Attributes: [NSNumber numberWithBool:YES],
                                      };
     
+//    if (forSummaryPage) {
+//        
+//        builderOptions = @{
+//                           DTDefaultFontFamily: @"Arial",
+//                           DTDefaultFontSize:@"16",
+//                           DTUseiOS6Attributes: [NSNumber numberWithBool:YES],
+//                           DTDefaultTextColor: [UIColor colorWithRed:78.0/255.0 green:151.0/255.0 blue:70.0/255.0 alpha:1],
+//                           };
+//
+//        
+//    }else{
+//        
+//        builderOptions = @{
+//                           DTDefaultFontFamily: @"Arial",
+//                           DTDefaultFontSize:@"16",
+//                           DTUseiOS6Attributes: [NSNumber numberWithBool:YES],
+//                           DTDefaultTextColor: [UIColor blackColor],
+//                           };
+//
+//        
+//    }
+    
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithHTMLData:data options:builderOptions documentAttributes:nil];
     
     txtViewAttrOption.shouldDrawImages = YES;
     
     [txtViewAttrOption setAttributedString:attrString];
     
+    
+    //    [txtViewAttrOption setBackgroundColor:[UIColor greenColor]];
     
     CGSize size = [txtViewAttrOption.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:txtViewAttrOption.frame.size.width];
     
@@ -2105,8 +2295,11 @@ UIButton* btnOptionSelected;
     
     NSLog(@"arrHints : %@",[arrHints description]);
     NSLog(@"strExplanation : %@",strExplanation);
+//    int topMarginYordinate = 92;
+//    int optionHeight = 73;
     
     //Set Check Answer Frame
+//    btnCheckAnswer.frame = CGRectMake(btnCheckAnswer.frame.origin.x, (optionHeight*noOfOptions) + 95, btnCheckAnswer.frame.size.width, btnCheckAnswer.frame.size.height);
     NSLog(@"noOfOptions : %i",noOfOptions);
     
     if ([imgViewQuestionImage isHidden]) {
@@ -2120,6 +2313,8 @@ UIButton* btnOptionSelected;
     
     //Temporarily Store Hints according to sequence
     noOfHints1 = [arrHints count];
+    
+    //    NSMutableArray* arrHintText = [[NSMutableArray alloc] initWith];
     NSMutableDictionary* dictHintText = [[NSMutableDictionary alloc] init];
     for (int i=0; i<noOfHints1; i++) {
         
@@ -2131,6 +2326,7 @@ UIButton* btnOptionSelected;
     [lblBtnHints setText:[NSString stringWithFormat:@"Hints (%i left)",noOfHints1]];
     [btnHints setTitle:[NSString stringWithFormat:@"%i",noOfHints1] forState:UIControlStateNormal];
     
+    //    [viewHints setBackgroundColor:[UIColor greenColor]];
     
     //Populate Hints into labels
     
@@ -2195,6 +2391,7 @@ UIButton* btnOptionSelected;
                                      };
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithHTMLData:data options:builderOptions documentAttributes:nil];
     [attrTxtViewExplanation setAttributedString:attrString];
+    //    [attrTxtViewExplanation setBackgroundColor:[UIColor brownColor]];
     [viewExplanation addSubview:attrTxtViewExplanation];
     
     CGSize size = [attrTxtViewExplanation.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:attrTxtViewExplanation.frame.size.width];
@@ -2222,6 +2419,7 @@ UIButton* btnOptionSelected;
     NSMutableDictionary* dictQuestionInfo = [dictAllResources valueForKey:requiredKey];
     UILabel* lblAnswerSelected = (UILabel*)[viewOption viewWithTag:viewOption.tag*MULTIPLIER_ANSWER_TEXT+ADDITIVE_ANSWER_TEXT_LABEL];
     
+    //    [arrQuestionInfo insertObject:lblAnswerSelected.text atIndex:GET_RESOURCE_USERANSWER];
     [dictQuestionInfo setValue:lblAnswerSelected.text forKey:QUESTION_USERANSWER];
     
     [dictAllResources setValue:dictQuestionInfo forKey:requiredKey];
@@ -2250,13 +2448,14 @@ UIButton* btnOptionSelected;
     if ([btnOptionSelected.titleLabel.text isEqualToString:@"1"]) {
         
         [btnOptionSelected setImage:[UIImage imageNamed:@"Answer_correct@2x.png"] forState:UIControlStateSelected];
-        
+       
     }else{
         
         [btnOptionSelected setImage:[UIImage imageNamed:@"Answer_incorrect@2x.png"] forState:UIControlStateSelected];
         
         [imgViewAnswerComment setFrame:CGRectMake(btnCheckAnswer.frame.origin.x, btnCheckAnswer.frame.origin.y + btnCheckAnswer.frame.size.height + 20, imgViewAnswerComment.frame.size.width, imgViewAnswerComment.frame.size.height)];
         
+//        [self shouldHideView:imgViewAnswerComment :FALSE];
         [imgViewAnswerComment setImage:[UIImage imageNamed:@"lblWrongAnswer.png"]];
     }
 }
@@ -2276,6 +2475,7 @@ UIButton* btnOptionSelected;
         
         [btnToSelectDeselect setImage:[UIImage imageNamed:@"btnOptionSelected.png"] forState:UIControlStateSelected];
         
+//        [self shouldHideView:imgViewAnswerComment :TRUE];
         
         if (tagBtn != [sender tag]) {
             
@@ -2288,6 +2488,7 @@ UIButton* btnOptionSelected;
             
             [btnToSelectDeselect setSelected:TRUE];
             [lblOption setTextColor:[UIColor whiteColor]];
+            //            validatorViewToHideUnhide.hidden = FALSE;
             
         }
         
@@ -2298,32 +2499,34 @@ UIButton* btnOptionSelected;
 
 - (IBAction)btnActionOESubmit:(id)sender {
     
-    
+
     NSString *strToCheck = [txtViewOEAnswer.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
+
     if ([sender isEnabled]) {
         if (strToCheck == (id)[NSNull null] || strToCheck == NULL || [strToCheck  isEqual: @""]) {
             
-            [self.view makeToast:@"Please type in the answer to submit" duration:3.0 pointPosition:self.view.center];
+           // [self.view makeToast:@"Answer text should not be empty." duration:3.0 pointPosition:CGPointMake(564, 600)];
+            [self shouldHideView: lblEmptyText : FALSE];
+            
             
         }else{
-            
-            NSArray* keys = [self sortedIntegerKeysForDictionary:dictAllResources];
-            
-            NSString* requiredKey = [keys objectAtIndex:carousel.currentItemIndex];
-            
-            NSMutableDictionary* dictQuestionInfo = [dictAllResources valueForKey:requiredKey];
-            
-            [dictQuestionInfo setValue:txtViewOEAnswer.text forKey:QUESTION_USERANSWER];
-            
-            [dictAllResources setValue:dictQuestionInfo forKey:requiredKey];
-            [sender setEnabled:FALSE];
-            
-            [txtViewOEAnswer setEditable:FALSE];
-            
-            
-        }
         
+        NSArray* keys = [self sortedIntegerKeysForDictionary:dictAllResources];
+        
+        NSString* requiredKey = [keys objectAtIndex:carousel.currentItemIndex];
+        
+        NSMutableDictionary* dictQuestionInfo = [dictAllResources valueForKey:requiredKey];
+        
+        [dictQuestionInfo setValue:txtViewOEAnswer.text forKey:QUESTION_USERANSWER];
+        
+        [dictAllResources setValue:dictQuestionInfo forKey:requiredKey];
+        [sender setEnabled:FALSE];
+        
+        [txtViewOEAnswer setEditable:FALSE];
+        
+
+    }
+    
     }
     
     
@@ -2405,6 +2608,7 @@ UIButton* btnOptionSelected;
     
     viewHints.frame = CGRectMake(viewHints.frame.origin.x, viewHints.frame.origin.y, viewHints.frame.size.width, viewHints.frame.size.height);
     viewExplanation.frame = CGRectMake(viewExplanation.frame.origin.x, viewExplanation.frame.origin.y, viewExplanation.frame.size.width, viewExplanation.frame.size.height);
+    //    [scrollViewQuestionRhs setContentSize:CGSizeMake(scrollViewQuestionRhs.frame.size.width,scrollViewQuestionRhs.frame.size.height)];
     
     
     [UIView beginAnimations:nil context:NULL];
@@ -2452,6 +2656,7 @@ UIButton* btnOptionSelected;
     
     
     [self autoScrollToEndForScrollView:scrollViewQuestionLhs];
+    //    [self performSelector:@selector(autoScrollToEndForScrollView:) withObject:scrollViewQuestionRhs afterDelay:0.4];
     
     
 }
@@ -2465,6 +2670,13 @@ UIButton* btnOptionSelected;
     NSLog(@"webView.frame.size.height : %f",[view_Question superview].frame.size.height);
     
     if (scrollView.contentSize.height > scrollView.frame.size.height) {
+        
+        
+        
+        //        float x= scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.size.height;
+        //        CGPoint bottomOffset = CGPointMake(0, scrollView.contentOffset.y + x);
+        
+        //        CGPoint bottomOffset = CGPointMake(0, scrollView.contentSize.height - scrollView.frame.size.height);
         
         CGPoint bottomOffset = CGPointMake(0, scrollView.contentSize.height - scrollView.bounds.size.height);
         
@@ -2522,11 +2734,12 @@ UIButton* btnOptionSelected;
     [btnCheckAnswer setHidden:TRUE];
     
     [imgViewAnswerComment setHidden:TRUE];
-    
+
     //Reset OE
     [viewOEQuestion setHidden:TRUE];
     [btnOESubmit setEnabled:TRUE];
     [self shouldHideView:lblCharLimit :TRUE];
+    [self shouldHideView:lblEmptyText : TRUE];
     
     
     
@@ -2739,7 +2952,7 @@ UIButton* btnOptionSelected;
             
             
             [scrollViewQuestionLhs setContentSize:CGSizeMake(scrollViewQuestionLhs.frame.size.width, (viewExplanation.frame.origin.y + viewExplanation.frame.size.height)+ 20)];
-            
+
             
         }
         
@@ -2843,7 +3056,14 @@ UIButton* btnOptionSelected;
         [activityIndicatorResourceLoading stopAnimating];
         
         [lblResourceTitle setText:@"Collection Summary"];
-        lblResourceTitle.frame = [self getWLabelFrameForLabel:lblResourceTitle withString:lblResourceTitle.text];
+        CGRect frame;
+        frame = [self getWLabelFrameForLabel:lblResourceTitle withString:lblResourceTitle.text];
+        if (frame.size.width>764) {
+            lblResourceTitle.frame=CGRectMake(lblResourceTitle.frame.origin.x, lblResourceTitle.frame.origin.y, 764, lblResourceTitle.frame.size.height);
+            
+        }else{
+            lblResourceTitle.frame=CGRectMake(lblResourceTitle.frame.origin.x, lblResourceTitle.frame.origin.y,frame.size.width, lblResourceTitle.frame.size.height);
+        }
         
         [self animateView:viewBottomBar forFinalFrame:CGRectMake(viewBottomBar.frame.origin.x, self.view.frame.size.height, viewBottomBar.frame.size.width, viewBottomBar.frame.size.height) inDuration:0.2];
         
@@ -2853,7 +3073,7 @@ UIButton* btnOptionSelected;
         
         SummaryPageViewController* summaryPageViewController = [[SummaryPageViewController alloc] initWithCollectionDetails:dictCollection andResourceDetails:dictAllResources andCollectionPlayerObject:self];
         [self swapCurrentControllerWith:summaryPageViewController];
-        
+
     }else{
         NSLog(@"self.view.frame.size.height - viewBottomBar.frame.size.height : %f",viewBottomBar.superview.frame.size.width - viewBottomBar.frame.size.height);
         
@@ -2874,12 +3094,12 @@ UIButton* btnOptionSelected;
 
 #pragma mark - Webview Delegates -
 -(void)webViewDidStartLoad:(UIWebView *)webView{
-    
+
     if (carousel.currentItemIndex != [dictAllResources count]) {
         NSLog(@"webViewDidStartLoad");
         [activityIndicatorResourceLoading startAnimating];
     }
-    
+   
     
 }
 
@@ -2892,13 +3112,24 @@ UIButton* btnOptionSelected;
         [activityIndicatorResourceLoading stopAnimating];
         
         [self updateWebviewControlFor:webView];
-        
+
     }
-    
+
+       
+//    NSRange range_ForPdf = [webView.request.URL.absoluteString rangeOfString:@".pdf"];
+//    if (range_ForPdf.location != NSNotFound) {
+//        
+//        
+//        [self performSelector:@selector(scrollPdf:) withObject:(UIWebView*)webView afterDelay:2.0f];
+//        
+//    }
+
+
+
 }
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    [activityIndicatorResourceLoading stopAnimating];
+   [activityIndicatorResourceLoading stopAnimating];
 }
 
 
@@ -2918,10 +3149,14 @@ UIButton* btnOptionSelected;
         
         
         if (![[dictResourceInfo valueForKey:RESOURCE_URL] rangeOfString:@"docs.google.com"].length == 0)  {
+            
+            //        viewWebControls.hidden = FALSE;
             [self hideWebviewControls:FALSE];
             
             
         }else {
+            
+            //        viewWebControls.hidden = TRUE;
             [self hideWebviewControls:FALSE];
             
             
@@ -2939,9 +3174,9 @@ UIButton* btnOptionSelected;
         }else {
             btnWebControlForward.enabled = FALSE;
         }
-        
+
     }
-    
+        
 }
 
 
@@ -2961,15 +3196,54 @@ UIButton* btnOptionSelected;
         
     }else{
         
-        viewWebControls.frame = CGRectMake(viewWebControls.frame.origin.x, 664, viewWebControls.frame.size.width, viewWebControls.frame.size.height);
+        viewWebControls.frame = CGRectMake(viewWebControls.frame.origin.x, 665, viewWebControls.frame.size.width, viewWebControls.frame.size.height);
         
     }
     
     [UIView commitAnimations];
-    
+
 }
 
 #pragma mark - Scroll PDFs -
+
+-(void)scrollPdf:(UIWebView*)webView{
+    
+    //Get all Keys and sort
+//    NSArray* keysDictAllResources =  [self sortedIntegerKeysForDictionary:dictAllResources];
+    
+    //Get key for the resource to be Loaded
+//    NSString* requiredKey = [keysDictAllResources objectAtIndex:carousel.currentItemIndex];
+    
+    //Hitting Dictionary For the Resource Details
+//    NSMutableDictionary* dictResourceInfo = [dictAllResources objectForKey:requiredKey];
+    
+//    NSLog(@"Incoming Page to scroll : %i",[[arr_resourceInfo objectAtIndex:6] intValue]);
+    
+//    if ([[arr_resourceInfo objectAtIndex:6] intValue] < [[arr_resourceInfo objectAtIndex:8] intValue]){
+//        
+//        if ([[arr_resourceInfo objectAtIndex:6] intValue] > 1 ){
+//            
+//            NSRange range = [[arr_resourceInfo objectAtIndex:2] rangeOfString:@".pdf"];
+//            
+//            
+//            if (range.location != NSNotFound) {
+//                
+//                float pageCount = 0;
+//                float scrollPos = 0;
+//                
+//                pageCount = [[arr_resourceInfo objectAtIndex:8] floatValue];
+//                NSLog(@"webView.scrollView total height :%f",webView.scrollView.contentSize.height);
+//                scrollPos = [self getScrollPositionForPage:[arr_resourceInfo objectAtIndex:6] whereTotalHeight:webView.scrollView.contentSize.height andPageCount:pageCount];
+//                
+//                [webView.scrollView setContentOffset:CGPointMake(0, scrollPos) animated:YES];
+//                
+//            }
+//        }
+//    }
+    
+//    [appDelegate removeLibProgressView:mainContentView];
+    //    btn_closeCollectionsPlay.enabled = TRUE;
+}
 
 -(float)getScrollPositionForPage:(NSString*)page whereTotalHeight:(float)totalHeight andPageCount:(double)pageCount{
     
@@ -3001,7 +3275,7 @@ UIButton* btnOptionSelected;
     return scrollPos;
 }
 
-
+    
 
 
 #pragma mark - BA Webview controls -
@@ -3070,83 +3344,74 @@ UIButton* btnOptionSelected;
     
     //Hitting Dictionary For the Resource Details
     NSMutableDictionary* dictResourceInfo = [dictAllResources objectForKey:requiredKey];
-    
-    
-    //Setting the Reaction
-    
-    [dictResourceInfo setValue:[NSString stringWithFormat:@"%i",[sender tag]] forKey:RESOURCE_REACTION];
+
     
     [dictAllResources setValue:dictResourceInfo forKey:requiredKey];
+    
+    //Setting the Reaction
+    if ([sender isSelected]) {
+        [dictResourceInfo setValue:@"NA" forKey:RESOURCE_REACTION];
+        [sender setSelected:FALSE];
+    }else{
+        [dictResourceInfo setValue:[NSString stringWithFormat:@"%i",[sender tag]] forKey:RESOURCE_REACTION];
+        [sender setSelected:TRUE];
+    }
     
     //Set Selected
     for (int i=0; i<5; i++) {
         
         UIButton* btnReaction = (UIButton*)[viewBottomBar viewWithTag:(i+1)*111];
-        [btnReaction setSelected:FALSE];
+        
+        if (btnReaction.tag != [sender tag]) {
+            [btnReaction setSelected:FALSE];
+        }
+
+    }
+
+    [self manageReactionToastForReaction:sender];
+
+    
+    if ([sender isSelected]) {
+        
+        NSString *tempReaction;
+        switch ([sender tag]) {
+            case 111:
+                tempReaction = @"i-can-explain";
+                break;
+            case 222:
+                tempReaction = @"i-can-understand";
+                break;
+            case 333:
+                tempReaction = @"meh";
+                break;
+            case 444:
+                tempReaction = @"i-donot-understand";
+                break;
+            case 555:
+                tempReaction = @"i-need-help";
+                break;
+            default:
+                break;
+        }
+        
+        //Mixpanel logReactionsforResource dictionary
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:[dictResourceInfo valueForKey:RESOURCE_ACTUAL_ID] forKey:@"Resource Id"];
+        [dictionary setObject:[dictResourceInfo valueForKey:RESOURCE_TITLE] forKey:@"Resource Title"];
+        [appDelegate logMixpanelforevent:@"Reactions" and:dictionary];
+        
+        
+        [self logReactionsforResource:[dictResourceInfo valueForKey:RESOURCE_ACTUAL_ID] withReaction:tempReaction];
         
     }
     
-    [sender setSelected:TRUE];
-    [self manageReactionToastForReaction:sender];
     
-    
-    
-    
-    NSString *tempReaction;
-    switch ([sender tag]) {
-        case 111:
-            tempReaction = @"i-can-explain";
-            break;
-        case 222:
-            tempReaction = @"i-understand";
-            break;
-        case 333:
-            tempReaction = @"meh";
-            break;
-        case 444:
-            tempReaction = @"i-donot-understand";
-            break;
-        case 555:
-            tempReaction = @"i-need-help";
-            break;
-        default:
-            break;
-    }
-    
-    [self logReactionsforResource:[dictResourceInfo valueForKey:RESOURCE_ACTUAL_ID] withReaction:tempReaction];
-    
+
 }
 
 
 
 #pragma mark Log Reaction for resource
-
-
--(void)getReactionsforResource:(NSString*)gooruOid{
-    
-    NSString *strURL = [NSString stringWithFormat:@"%@/gooruapi/rest/v2/reaction/%@?sessionToken=%@",[appDelegate getValueByKey:@"ServerURL"],gooruOid,sessionToken];
-    
-    NSLog(@"StrURL : %@",strURL);
-    
-    NSURL *url = [NSURL URLWithString:[appDelegate getValueByKey:@"ServerURL"]];
-    
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    
-    [httpClient getPath:[NSString stringWithFormat:@"%@/gooruapi/rest/v2/reaction/%@?sessionToken=%@",[appDelegate getValueByKey:@"ServerURL"],gooruOid,sessionToken] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        
-        [appDelegate removeLibProgressView:self.view];
-        
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        NSLog(@"[HTTPClient Error]: %@", error.localizedDescription);
-    }];
-    
-    
-    
-}
-
 -(void)logReactionsforResource:(NSString*)gooruOid withReaction:(NSString*)reaction{
     
     NSURL *url = [NSURL URLWithString:serverUrl];
@@ -3154,9 +3419,6 @@ UIButton* btnOptionSelected;
     
     NSMutableArray* parameterKeys = [NSMutableArray arrayWithObjects:@"data", nil];
     
-    if ([reaction isEqualToString:@"i-understand"]) {
-        reaction = @"i-can-understand";
-    }
     
     NSString* strFields = [NSString stringWithFormat:@"{\"target\" : {\"value\":\"content\"}, \"type\" : {\"value\":\"%@\"}, \"assocGooruOid\":\"%@\", \"context\" : \"{\\\"parentGooruId\\\" : \\\"%@\\\",\\\"contentGooruId\\\" : \\\"%@\\\"}\"}",reaction,gooruOid,collectionGooruId,gooruOid];
     
@@ -3176,6 +3438,29 @@ UIButton* btnOptionSelected;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"[HTTPClient Error]: %@", [error description]);
     }];
+     
+}
+
+- (void)deleteReactionforResource:(NSString*)resourceActualId{
+    
+    NSURL *url = [NSURL URLWithString:serverUrl];
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+    
+    NSMutableArray* parameterKeys = [NSMutableArray arrayWithObjects:@"sessionToken", nil];
+    NSMutableArray* parameterValues =  [NSMutableArray arrayWithObjects:sessionToken, nil];
+	NSMutableDictionary* dictPostParams = [NSMutableDictionary dictionaryWithObjects:parameterValues forKeys:parameterKeys];
+    
+    [httpClient deletePath:[NSString stringWithFormat:@"/gooruapi/rest/v2/reaction/%@?sessionToken=%@",resourceActualId,sessionToken] parameters:dictPostParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSLog(@"Response delete reaction : %@",responseStr);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"[HTTPClient Error]: %@", [error description]);
+    }];
+    
+    
+    
+    
     
 }
 
@@ -3185,54 +3470,60 @@ UIButton* btnOptionSelected;
     
     UIButton* btnReaction  = (UIButton*)sender;
     
-    switch ([sender tag]) {
-        case 111:{
-            
-            imgViewReactionToast.frame = CGRectMake(0, 0, 93, 36);
-            [imgViewReactionToast setImage:[UIImage imageNamed:@"React1Toast@2x.png"]];
-            
-            [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x + 31, -20)] image:imgViewReactionToast];
-            
-            break;
+//    [viewBottomBar makeToast:nil duration:3.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x, btnReaction.frame.origin.y)] title:nil image:[UIImage imageNamed:@"cancel_btn.png"]];
+    
+    if ([sender isSelected]) {
+        switch ([sender tag]) {
+            case 111:{
+                
+                imgViewReactionToast.frame = CGRectMake(0, 0, 93, 36);
+                [imgViewReactionToast setImage:[UIImage imageNamed:@"React1Toast@2x.png"]];
+                
+                [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x + 31, -20)] image:imgViewReactionToast];
+                
+                break;
+            }
+            case 222:{
+                
+                imgViewReactionToast.frame = CGRectMake(0, 0, 93, 36);
+                [imgViewReactionToast setImage:[UIImage imageNamed:@"React2Toast@2x.png"]];
+                [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x + 15, -20)] image:imgViewReactionToast];
+                
+                break;
+            }
+            case 333:{
+                
+                
+                imgViewReactionToast.frame = CGRectMake(0, 0, 62, 36);
+                [imgViewReactionToast setImage:[UIImage imageNamed:@"React3Toast@2x.png"]];
+                [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x + 15, -20)] image:imgViewReactionToast];
+                
+                break;
+            }
+            case 444:{
+                
+                
+                imgViewReactionToast.frame = CGRectMake(0, 0, 104, 36);
+                [imgViewReactionToast setImage:[UIImage imageNamed:@"React4Toast@2x.png"]];
+                [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x + 13, -20)] image:imgViewReactionToast];
+                
+                break;
+            }
+            case 555:{
+                
+                
+                imgViewReactionToast.frame = CGRectMake(0, 0, 93, 36);
+                [imgViewReactionToast setImage:[UIImage imageNamed:@"React5Toast@2x.png"]];
+                [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x - 2, -20)] image:imgViewReactionToast];
+                
+                break;
+            }
+            default:
+                break;
         }
-        case 222:{
-            
-            imgViewReactionToast.frame = CGRectMake(0, 0, 93, 36);
-            [imgViewReactionToast setImage:[UIImage imageNamed:@"React2Toast@2x.png"]];
-            [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x + 15, -20)] image:imgViewReactionToast];
-            
-            break;
-        }
-        case 333:{
-            
-            
-            imgViewReactionToast.frame = CGRectMake(0, 0, 62, 36);
-            [imgViewReactionToast setImage:[UIImage imageNamed:@"React3Toast@2x.png"]];
-            [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x + 15, -20)] image:imgViewReactionToast];
-            
-            break;
-        }
-        case 444:{
-            
-            
-            imgViewReactionToast.frame = CGRectMake(0, 0, 104, 36);
-            [imgViewReactionToast setImage:[UIImage imageNamed:@"React4Toast@2x.png"]];
-            [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x + 13, -20)] image:imgViewReactionToast];
-            
-            break;
-        }
-        case 555:{
-            
-            
-            imgViewReactionToast.frame = CGRectMake(0, 0, 93, 36);
-            [imgViewReactionToast setImage:[UIImage imageNamed:@"React5Toast@2x.png"]];
-            [viewBottomBar makeGooruToast:nil duration:2.0 position:[NSValue valueWithCGPoint:CGPointMake(btnReaction.frame.origin.x - 2, -20)] image:imgViewReactionToast];
-            
-            break;
-        }
-        default:
-            break;
+
     }
+    
     
 }
 
@@ -3252,7 +3543,7 @@ UIButton* btnOptionSelected;
 
 #pragma mark Manage Reactions for resource
 -(void)manageReactionsOnLoad{
-    
+
     //Get all Keys and sort
     NSArray* keysDictAllResources =  [self sortedIntegerKeysForDictionary:dictAllResources];
     
@@ -3261,7 +3552,7 @@ UIButton* btnOptionSelected;
     
     //Hitting Dictionary For the Resource Details
     NSMutableDictionary* dictResourceInfo = [dictAllResources objectForKey:requiredKey];
-    
+
     //Set Selected
     for (int i=0; i<5; i++) {
         
@@ -3269,11 +3560,52 @@ UIButton* btnOptionSelected;
         [btnReaction setSelected:FALSE];
         
     }
+    
     if (![[dictResourceInfo valueForKey:RESOURCE_REACTION] isEqualToString:@"NA"]) {
         UIButton* btnReaction = (UIButton*)[viewBottomBar viewWithTag:[[dictResourceInfo valueForKey:RESOURCE_REACTION] intValue]];
         [btnReaction setSelected:TRUE];
     }
     
+//    [self getReactionsforResourceId:[dictResourceInfo valueForKey:RESOURCE_ACTUAL_ID] forKey:requiredKey];
+
+}
+
+-(void)getReactionsforResourceId:(NSString*)resourceActualId forKey:(NSString*)requiredKey{
+    
+    //Hitting Dictionary For the Resource Details
+    NSMutableDictionary* dictResourceInfo = [dictAllResources objectForKey:requiredKey];
+    
+    if(isAnonymous){
+        
+        if (![[dictResourceInfo valueForKey:RESOURCE_REACTION] isEqualToString:@"NA"]) {
+            UIButton* btnReaction = (UIButton*)[viewBottomBar viewWithTag:[[dictResourceInfo valueForKey:RESOURCE_REACTION] intValue]];
+            [btnReaction setSelected:TRUE];
+        }
+
+        
+        
+    }else{
+        NSString *strURL = [NSString stringWithFormat:@"%@/gooruapi/rest/v2/content/%@/reaction?sessionToken=%@",serverUrl,resourceActualId,sessionToken];
+        
+        NSLog(@"StrURL Get Reaction : %@",strURL);
+        
+        NSURL *url = [NSURL URLWithString:serverUrl];
+        
+        AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+        
+        [httpClient getPath:[NSString stringWithFormat:@"%@/gooruapi/rest/v2/content/%@/reaction?sessionToken=%@",serverUrl,resourceActualId,sessionToken] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+            
+            NSLog(@"Response Get Reaction : %@",responseStr);
+            
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+            NSLog(@"[HTTPClient Error]: %@", error.localizedDescription);
+        }];
+
+    }
+
 }
 
 
@@ -3290,8 +3622,9 @@ UIButton* btnOptionSelected;
     CGPoint center;
     
     center.x = btnShare.center.x;
+//    center.y = 663;
     center.y = viewBottomBar.frame.origin.y - (viewRCChooser.frame.size.height/2);
-    
+      
     switch ([sender tag]) {
         case 111:{
             strShareTo = SHARE_FACEBOOK;
@@ -3313,7 +3646,7 @@ UIButton* btnOptionSelected;
             
             imageEmail.hidden = TRUE;
             imageFacebookTwitter.hidden = FALSE;
-            
+
             
             break;
         }
@@ -3350,7 +3683,7 @@ UIButton* btnOptionSelected;
         
         [params setValue:[NSNumber numberWithBool:TRUE] forKey:@"Value"];
         [self performSelector:@selector(shouldHideView:) withObject:params afterDelay:5.0];
-        
+
     }else{
         
         [self btnActionShareCollection:sender];
@@ -3438,6 +3771,9 @@ UIButton* btnOptionSelected;
         
         [SHKiOSFacebook shareItem:shareItem];
         
+        //Mixpanel track Facebook
+//        [appDelegate logMixpanelforevent:@"Facebook Share - Collection" and:dictionary];
+        
     }else if([strShareTo isEqualToString:SHARE_TWITTER]){
         
         shareItem = [SHKItem URL:[NSURL URLWithString:urlToShare] title:[NSString stringWithFormat:@"%@\n%@",[dictCollection valueForKey:COLLECTION_TITLE],urlToShare] contentType:SHKURLContentTypeWebpage];
@@ -3445,6 +3781,9 @@ UIButton* btnOptionSelected;
         [shareItem setImage:imgViewCoverPage.image];
         
         [SHKiOSTwitter shareItem:shareItem];
+        
+        //Mixpanel track Twitter
+//        [appDelegate logMixpanelforevent:@"Twitter Share - Collection" and:dictionary];
         
     }else if([strShareTo isEqualToString:SHARE_EMAIL]){
         
@@ -3475,6 +3814,8 @@ UIButton* btnOptionSelected;
             //or if you want to change it's position also, then:
             emailController.view.superview.frame = CGRectMake(236, 146, 540, 540);
             
+            //Mixpanel track Email
+//            [appDelegate logMixpanelforevent:@"Email Share - Collection" and:dictionary];
         } else {
             // Handle the error
             
@@ -3495,14 +3836,14 @@ UIButton* btnOptionSelected;
     
 }
 
-#pragma mark BA Share Collection
+#pragma mark BA Share Resource
 - (IBAction)btnActionShareResource:(id)sender {
     
     [self getBitlyUrlWithSender:sender ifCollection:FALSE];
     
 }
 
-#pragma mark Share Collection
+#pragma mark Share Resource
 -(void)shareResource:(id)sender withUrl:(NSString*)urlToShare{
     
     //Get all Keys and sort
@@ -3513,19 +3854,31 @@ UIButton* btnOptionSelected;
     
     //Hitting Dictionary For the Resource Details
     NSMutableDictionary* dictResourceInfo = [dictAllResources objectForKey:requiredKey];
-    
+
     
     shareItem = [SHKItem URL:[NSURL URLWithString:urlToShare] title:[NSString stringWithFormat:@"%@\n%@",[dictResourceInfo valueForKey:RESOURCE_TITLE],urlToShare] contentType:SHKURLContentTypeWebpage];
+    
+    //Mixpanel track dictionary
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+    [dictionary setObject:[NSString stringWithFormat:@"%@\n",[dictResourceInfo valueForKey:RESOURCE_TITLE]] forKey:@"ResourceTitle"];
+    [dictionary setObject:[NSString stringWithFormat:@"%@\n",[dictResourceInfo valueForKey:RESOURCE_ACTUAL_ID]] forKey:@"gooruOid"];
     
     
     if ([strShareTo isEqualToString:SHARE_FACEBOOK]) {
         
         [SHKiOSFacebook shareItem:shareItem];
         
+        //Mixpanel track Facebook
+//        [appDelegate logMixpanelforevent:@"Facebook Share - Resource" and:dictionary];
+        
+        
     }else if([strShareTo isEqualToString:SHARE_TWITTER]){
         
         
         [SHKiOSTwitter shareItem:shareItem];
+        
+        //Mixpanel track Twitter
+//        [appDelegate logMixpanelforevent:@"Twitter Share - Resource" and:dictionary];
         
     }else if([strShareTo isEqualToString:SHARE_EMAIL]){
         
@@ -3556,6 +3909,8 @@ UIButton* btnOptionSelected;
             //or if you want to change it's position also, then:
             emailController.view.superview.frame = CGRectMake(236, 146, 540, 540);
             
+            //Mixpanel track Email
+//            [appDelegate logMixpanelforevent:@"Share Email - Resource" and:dictionary];
         } else {
             // Handle the error
             
@@ -3618,7 +3973,7 @@ UIButton* btnOptionSelected;
         [dictResourceInfo setValue:@"Yes" forKey:RESOURCE_FLAG];
         
         [dictAllResources setValue:dictResourceInfo forKey:requiredKey];
-        
+
         [btnFlag setSelected:TRUE];
         
     }
@@ -3678,6 +4033,7 @@ UIButton* btnOptionSelected;
     NSArray* arrComponentsForTime = [time componentsSeparatedByString:@":"];
     
     int lengthArrComponentsForTime = [arrComponentsForTime count];
+//    NSLog(@"lengthArrComponentsForTime : %i",lengthArrComponentsForTime);
     
     if (lengthArrComponentsForTime > 1) {
         if (lengthArrComponentsForTime == 2) {
@@ -3702,6 +4058,7 @@ UIButton* btnOptionSelected;
     
     
     NSLog(@"youtubeURL : %@",youtubeURL);
+
     
     NSError *error = NULL;
     NSString *regexString = @"(?<=v(=|/))([-a-zA-Z0-9_]+)|(?<=youtu.be/)([-a-zA-Z0-9_]+)";
@@ -3721,6 +4078,7 @@ UIButton* btnOptionSelected;
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     
+    [self shouldHideView:lblEmptyText : TRUE];
     int allowedLength;
     switch(textView.tag) {
         case 777:
@@ -3859,6 +4217,8 @@ UIButton* btnOptionSelected;
     CGRect newFrame = label.frame;
     newFrame.size.height = expectedLabelSize.height;
     
+    //    NSLog(@"in meth : %f :: %f",expectedLabelSize.width,expectedLabelSize.height);
+    
     
     return newFrame;
     
@@ -3902,7 +4262,7 @@ UIButton* btnOptionSelected;
      
      //4. Animate the views to create a transition effect
                      animations:^{
-                         
+                                                  
                          //The new controller's view is going to take the position of the current controller's view
                          viewController.view.frame = CGRectMake(0, 0, viewController.view.frame.size.width, viewController.view.frame.size.height);
                          
@@ -4001,7 +4361,9 @@ UIButton* btnOptionSelected;
     
     scrollNarrationOverlay.delegate = nil;
     lbYouTubePlayerViewController.delegate = nil;
-    
+
+    [appDelegate logMixpanelforevent:@"Exit Collection" and:nil];
+
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }

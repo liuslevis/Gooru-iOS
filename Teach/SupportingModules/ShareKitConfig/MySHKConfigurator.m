@@ -1,8 +1,9 @@
 //
 //  MySHKConfigurator.m
 //  SocialShare
+// Gooru
 //
-//  Created by Gooru on 6/18/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -37,8 +38,7 @@
  These values are used by any service that shows 'shared from XYZ'
  */
 - (NSString*)appName {
-    AppDelegate *appDelegate = (AppDelegate*) [[UIApplication sharedApplication] delegate];
-	return [appDelegate getValueByKey:@"MessageTitle"];
+	return @"Gooru";
 }
 
 - (NSString*)appURL {

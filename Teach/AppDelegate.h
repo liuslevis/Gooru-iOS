@@ -1,8 +1,8 @@
 //
 //  AppDelegate.h
-//  CollectionPlayerRef
+// Gooru
 //
-//  Created by Gooru on 4/30/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -47,13 +47,13 @@
 
 - (void)showLibProgressOnView:(UIView *)pView andMessage:(NSString *) message;
 - (void)removeLibProgressView:(UIView *)pView;
+- (void)logMixpanelforevent:(NSString*)eventTitle and:(NSMutableDictionary*)properties;
 
 #pragma mark - Display resource type icon -
 - (UIImage*) imageForResourceType:(NSString*)type;
 
 #pragma mark Get from pList
 -(NSString*) getValueByKey:(NSString*)key;
--(NSArray*) getArrayValueByKey:(NSString*)key;
 
 #pragma mark - Create Sorted Array for Dictionary Integer Keys
 -(NSArray*)sortedIntegerKeysForDictionary:(NSMutableDictionary*)dict;

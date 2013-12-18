@@ -2,7 +2,7 @@
 //  AssignmentViewController.m
 // Gooru
 //
-//  Created by Gooru on 8/12/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -65,7 +65,7 @@
 @end
 
 @implementation AssignmentViewController
-@synthesize btnExitClasspage;
+@synthesize btnExitClasspage,btnExitClasspageNoAssignment;
 @synthesize isLoggedOut;
 @synthesize isYourFirstClasspageAss;
 
@@ -131,14 +131,14 @@ float originalAssignmentScrollContentSizeHeight;
     
     [self didMoveToParentViewController:self];
     
-    sessionToken  = [standardUserDefaults stringForKey:@"token"];
-    
-    if ([sessionToken isEqualToString:@"NA"]) {
-        NSLog(@"User Auth Status : User Logged Out!");
-        sessionToken = [standardUserDefaults objectForKey:@"defaultGooruSessionToken"];
-    }else{
-        NSLog(@"User Auth Status : User Logged In!");
-    }
+//    sessionToken  = [standardUserDefaults stringForKey:@"token"];
+//    
+//    if ([sessionToken isEqualToString:@"NA"]) {
+//        NSLog(@"User Auth Status : User Logged Out!");
+//        sessionToken = [standardUserDefaults objectForKey:@"defaultGooruSessionToken"];
+//    }else{
+//        NSLog(@"User Auth Status : User Logged In!");
+//    }
     
 }
 
@@ -161,20 +161,23 @@ float originalAssignmentScrollContentSizeHeight;
         NSLog(@"User Auth Status : User Logged In!");
     }
     
-    if (isLoggedOut) {
-        [btnExitClasspage setHidden:FALSE];
-        [viewExitClasspage setHidden:FALSE];
-        isLoggedOut=FALSE;
-    }else{
-        [btnExitClasspage setHidden:TRUE];
-        [viewClasscodeEmail setHidden:FALSE];
-        
-    }
+//    if (isLoggedOut) {
+//        [btnExitClasspage setHidden:FALSE];
+//        [viewExitClasspage setHidden:FALSE];
+//        isLoggedOut=FALSE;
+//        // isLoggedOut=FALSE;
+//    }else{
+//        [btnExitClasspage setHidden:TRUE];
+//        [viewClasscodeEmail setHidden:FALSE];
+//        // isLoggedOut=FALSE;
+//        
+//    }
     if (isTeach) {
-        [btnShareTab setHidden:FALSE];
+        [viewClasscodeEmail setHidden:FALSE];
+        [viewExitClasspage setHidden:TRUE];
     }else{
-        [btnShareTab setHidden:TRUE];
         [viewClasscodeEmail setHidden:TRUE];
+        [viewExitClasspage setHidden:FALSE];
 
     }
     
@@ -246,6 +249,7 @@ float originalAssignmentScrollContentSizeHeight;
     
     [httpClient getPath:[NSString stringWithFormat:@"/gooruapi/rest/v2/classpage/%@/item?",gooruOid] parameters:dictPostParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        //        NSLog(@"getAssignment Response : %@",responseStr);
         [self parseAssignments:responseStr];
         [activityIndicatorLoadAssignments stopAnimating];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -280,6 +284,8 @@ float originalAssignmentScrollContentSizeHeight;
         
         isAssignmemtsEmpty = FALSE;
         
+        //            NSLog(@"arrSearchResults : %@",[arrSearchResults description]);
+        
         int countArrSearchResults = [arrSearchResults count];
         
         dictAssignments = [[NSMutableDictionary alloc] init];
@@ -289,6 +295,8 @@ float originalAssignmentScrollContentSizeHeight;
             
             //Parse resource
             NSString* strTask = [appDelegate ifNullStrReplace:[[arrSearchResults objectAtIndex:i] valueForKey:@"task"] With:@"NA"];
+            //                NSLog(@"strAssignmentResource : %@",strAssignmentResource);
+            
             
             //===
             //Parse gooruOid - 1
@@ -366,6 +374,10 @@ float originalAssignmentScrollContentSizeHeight;
             viewAssignment.frame = CGRectMake(0, lastYordinate, viewAssignments.frame.size.width, 44);
             
             viewAssignment.layer.cornerRadius = 4.0;
+            
+//            viewAssignment.layer.shadowColor = [[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] CGColor];
+//            viewAssignment.layer.shadowOffset = CGSizeMake(0.0f,0.0f);
+//            viewAssignment.layer.shadowOpacity = .25f;
             
             [viewAssignment setTag:[[keysDictAssignments objectAtIndex:i] intValue]*MULTIPLIER_ASSIGNMENT_VIEW];
             
@@ -456,8 +468,8 @@ float originalAssignmentScrollContentSizeHeight;
             [lblAssignmentDirection setLineBreakMode:NSLineBreakByWordWrapping];
             lblAssignmentDirection.numberOfLines = 10;
        
+            NSString *decodedString = [[dictAssignmentPopulate valueForKey:@"assignmentDescription"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
-            NSString *decodedString = [NSString stringWithUTF8String:[[dictAssignmentPopulate valueForKey:@"assignmentDescription"] cStringUsingEncoding:NSUTF8StringEncoding]];
             [lblAssignmentDirection setText:decodedString];
             
             lblAssignmentDirection.frame = [appDelegate getHLabelFrameForLabel:lblAssignmentDirection withString:lblAssignmentDirection.text];
@@ -481,6 +493,7 @@ float originalAssignmentScrollContentSizeHeight;
             UIButton* btnAssignment = [UIButton buttonWithType:UIButtonTypeCustom];
             [btnAssignment setBackgroundColor:[UIColor clearColor]];
             btnAssignment.frame = CGRectMake(0, 0, viewAssignment.frame.size.width, 44);
+            // [btnAssignment.titleLabel setTextColor:[UIColor redColor]];
             
             [btnAssignment setTag:[[keysDictAssignments objectAtIndex:i] intValue]];
             [btnAssignment addTarget:self action:@selector(btnActionAssignment:) forControlEvents:UIControlEventTouchUpInside];
@@ -590,6 +603,8 @@ float originalAssignmentScrollContentSizeHeight;
         [dictionary setObject:[[dictAssignments valueForKey:[NSString stringWithFormat:@"%i",[sender tag]]] valueForKey:@"assignmentTitle"] forKey:@"AssignmentTitle"];
                 [dictionary setObject:[[dictAssignments valueForKey:[NSString stringWithFormat:@"%i",[sender tag]]] valueForKey:@"assignmentId"] forKey:@"AssignmentId"];
        
+        [appDelegate logMixpanelforevent:@"Tap on an assignment" and:dictionary];
+        //API Call for collections inside a classpage
         [self getAllAssignmentItemsForAssignmentId:[[dictAssignments valueForKey:[NSString stringWithFormat:@"%i",[sender tag]]] valueForKey:@"assignmentId"]];
     }
     
@@ -600,6 +615,8 @@ float originalAssignmentScrollContentSizeHeight;
 #pragma mark - Assignment Items -
 #pragma mark Get all Collections for an Assignment
 - (void)getAllAssignmentItemsForAssignmentId:(NSString*)gooruOid{
+    
+//    [appDelegate showLibProgressOnView:self.view andMessage:@""];
     
     NSLog(@"Assignment Id : %@",gooruOid);
     
@@ -617,6 +634,7 @@ float originalAssignmentScrollContentSizeHeight;
     
     [httpClient getPath:[NSString stringWithFormat:@"/gooruapi/rest/v2/assignment/%@/item?",gooruOid] parameters:dictPostParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        //        NSLog(@"getAssignment Response : %@",responseStr);
         [self parseAssignmentItems:responseStr];
         
         [self performSelector:@selector(enableUserInteraction) withObject:nil afterDelay:1.0];
@@ -659,11 +677,18 @@ float originalAssignmentScrollContentSizeHeight;
         //Populate no results screen
         NSLog(@"CONNECTION_IDENTIFIER_ASSIGNMENTS no results");
         isAssignmemtItemsEmpty = TRUE;
-
+        
+//        float finalScrollHeight = originalAssignmentScrollContentSizeHeight;
+//        [self setScrollLength:finalScrollHeight];
         
     }else{
         
+        
+        
         dictAssignmentsItems = [[NSMutableDictionary alloc] init];
+        
+        
+        
         
         for (int i=0; i<[strTotalHitCount intValue]; i++) {
             
@@ -858,6 +883,7 @@ float originalAssignmentScrollContentSizeHeight;
     
     NSLog(@"Views : %@",lblCollectionViewsToBeRefreshed.text);
     
+
     NSMutableDictionary* dictAppDetails = [[NSMutableDictionary alloc] init];
     [dictAppDetails setValue:[appDelegate getValueByKey:@"ServerURL"] forKey:@"ServerUrl"];
     
@@ -868,6 +894,7 @@ float originalAssignmentScrollContentSizeHeight;
     [dictAppDetails setValue:@"NA" forKey:@"ResourceInstanceId"];
     
     [dictAppDetails setValue:sessionToken forKey:@"SessionToken"];
+    
     
     
     if ([[standardUserDefaults stringForKey:@"token"] isEqualToString:@"NA"]) {
@@ -891,6 +918,7 @@ float originalAssignmentScrollContentSizeHeight;
     
     [dictAppDetails setValue:[NSNumber numberWithBool:TRUE] forKey:@"shouldAutoloadNarration"];
     
+         [appDelegate logMixpanelforevent:@"Share Email Summary" and:dictAppDetails];
     CollectionPlayerV2ViewController* collectionPlayerV2ViewController = [[CollectionPlayerV2ViewController alloc] initWithAppDetails:dictAppDetails];
     
     [self presentViewController:collectionPlayerV2ViewController animated:YES completion:nil];
@@ -911,15 +939,32 @@ float originalAssignmentScrollContentSizeHeight;
         NSString* currentAssignmentIdBeingEdited = [[dictAssignments valueForKey:[NSString stringWithFormat:@"%i",gesture.view.tag/MULTIPLIER_ASSIGNMENT_VIEW]] valueForKey:@"assignmentId"];
         UIView* currentAssignmentViewBeingEdited = gesture.view;
         
+        
+        
+        
+        
+        //        self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:viewEditAssignmentDatePickerParent];
+//        [self.flatDatePicker setTag:TAG_POPUP_EDITASSIGNMENT];
+        
+        //        self.flatDatePicker.delegate = self;
+        //        self.flatDatePicker.title = @"Select your Due Date";
+//        [self managePopup:TAG_POPUP_EDITASSIGNMENT];
+        
         //Pre Populate fields
         UILabel* lblAssignmentTitle = (UILabel*)[gesture.view viewWithTag:TAG_ASSIGNMENT_TITLE];
+        //        [txtFieldEditAssignmentTitle setText:lblAssignmentTitle.text];
         
         UILabel* lblAssignmentDueDate = (UILabel*)[gesture.view viewWithTag:TAG_ASSIGNMENT_DUEDATE];
         NSString* strDueDate = [lblAssignmentDueDate.text stringByReplacingOccurrencesOfString:@"Due Date: " withString:@""];
+        //        [lblEditAssignmentDueDate setText:strDueDate];
+        
         UILabel* lblAssignmentDirection = (UILabel*)[gesture.view viewWithTag:TAG_ASSIGNMENT_DIRECTION];
+        //        [txtViewEditAssignmentDirection setText:lblAssignmentDirection.text];
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        //        [dateFormatter setLocale:[NSLocale currentLocale]];
         [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+//        [self.flatDatePicker setDate:[dateFormatter dateFromString:strDueDate] animated:NO];
         
         UIButton* btnAssignmentBeingEdited = (UIButton*)[currentAssignmentViewBeingEdited viewWithTag:currentAssignmentViewBeingEdited.tag/MULTIPLIER_ASSIGNMENT_VIEW];
         
@@ -928,6 +973,7 @@ float originalAssignmentScrollContentSizeHeight;
         
         [dictEditAssignment setValue:currentAssignmentIdBeingEdited forKey:@"AssignmentId"];
         [dictEditAssignment setValue:currentAssignmentViewBeingEdited forKey:@"AssignmentView"];
+//        [dictToPopulateEditAssignment setValue:viewPopupEditAssignment forKey:@"AssignmentPopupParent"];
         [dictEditAssignment setValue:lblAssignmentTitle.text forKey:@"AssignmentTitle"];
         [dictEditAssignment setValue:strDueDate forKey:@"AssignmentDueDate"];
         [dictEditAssignment setValue:lblAssignmentDirection.text forKey:@"AssignmentDirection"];
@@ -936,7 +982,17 @@ float originalAssignmentScrollContentSizeHeight;
         
         
         NSLog(@"dictEditAssignment=%@",[dictEditAssignment description]);
-
+        
+        //Mixpanel track Successful Login
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setValue:lblAssignmentTitle.text forKey:@"AssignmentTitle"];
+        [dictionary setValue:strDueDate forKey:@"AssignmentDueDate"];
+        [dictionary setValue:currentAssignmentIdBeingEdited forKey:@"AssignmentId"];
+        [dictionary setValue:lblAssignmentDirection.text forKey:@"AssignmentDirection"];
+        NSLog(@"dictionary=%@",[dictionary description]);
+        [appDelegate logMixpanelforevent:@"Assignment Edit Pop Opened" and:dictionary];
+        
+        
         editAssignmentPopupViewController = [[EditAssignmentPopupViewController alloc] initWithAssignmentDetails:dictEditAssignment];
         if (isYourFirstClasspageAss) {
            // isYourFirstClasspageAss=FALSE;
@@ -989,6 +1045,11 @@ float originalAssignmentScrollContentSizeHeight;
         
         [self animateView:viewAssignments forFinalFrame:CGRectMake(self.view.frame.origin.x - 20 - viewAssignments.frame.size.width, viewAssignments.frame.origin.y, viewAssignments.frame.size.width, viewAssignments.frame.size.height)];
         
+        //Mixpanel track Share Classpage
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:[dictClasspage valueForKey:@"classpageCode"] forKey:@"ClassPageCode"];
+        [appDelegate logMixpanelforevent:@"Share Classpage - Teach Tab" and:dictionary];
+        
         txtViewShareClasscode.font = tahoma;
         
         NSLog(@"dictClasspage share : %@ ",[[dictClasspage valueForKey:@"classpageCode"] uppercaseString]);
@@ -1001,7 +1062,13 @@ float originalAssignmentScrollContentSizeHeight;
 
 - (IBAction)btnActionSendShareEmail:(id)sender {
     
-    NSString* urlToShare = [NSString stringWithFormat:@"http://concept.goorulearning.org/#!students-view&id=%@&pageSize=10&pageNum=1",[dictClasspage valueForKey:@"classpageId"]];
+    //Mixpanel track Share Email
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+    [dictionary setObject:[dictClasspage valueForKey:@"classpageCode"] forKey:@"ClassPageCode"];
+    
+    [appDelegate logMixpanelforevent:@"Share Classpage Email - Teach Tab" and:dictionary];
+    
+    NSString* urlToShare = [NSString stringWithFormat:@"http://www.goorulearning.org/#students-view&id=%@&pageSize=10&pageNum=0&pos=1",[dictClasspage valueForKey:@"classpageId"]];
     
     NSString* strSubject = [NSString stringWithFormat:@"Classpage : %@ ",[dictClasspage valueForKey:@"classpageTitle"]];
     
@@ -1052,7 +1119,9 @@ float originalAssignmentScrollContentSizeHeight;
         //Mixpanel track Email Sent to share classpage with Classcode
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
         [dictionary setObject:[dictClasspage valueForKey:@"classpageCode"] forKey:@"ClassPageCode"];
-
+        
+        [appDelegate logMixpanelforevent:@"Classpage Share Email sent" and:dictionary];
+        
     }
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -1076,6 +1145,27 @@ float originalAssignmentScrollContentSizeHeight;
     }
     
     [self adjustViewsAfterView:viewAssignmentToBePopulated whenOpening:isOpening withHeightDiff:height - 44];
+    
+    //    [self manageScrollLengthWhenOpening:isOpening withLengthDifference:height];
+    
+    
+    
+    //    NSArray* sortedKeysForDict_assignments = [appDelegate sortedIntegerKeysForDictionary:dict_assignments];
+    //    for (int i=0; i<[dict_assignments count]; i++) {
+    //
+    //        if ([[sortedKeysForDict_assignments objectAtIndex:i] intValue]*MULTIPLIER_ASSIGNMENT_VIEW > viewAssignmentToBePopulated.tag) {
+    //
+    //            UIView* viewsToBeAdjusted = (UIView*)[viewAssignments viewWithTag:[[sortedKeysForDict_assignments objectAtIndex:i] intValue]*MULTIPLIER_ASSIGNMENT_VIEW];
+    //
+    //            if (isOpening) {
+    //                [self animateView:viewsToBeAdjusted forFinalFrame:CGRectMake(viewsToBeAdjusted.frame.origin.x, viewsToBeAdjusted.frame.origin.y+100, viewsToBeAdjusted.frame.size.width, viewsToBeAdjusted.frame.size.height)];
+    //            }else{
+    //                [self animateView:viewsToBeAdjusted forFinalFrame:CGRectMake(viewsToBeAdjusted.frame.origin.x, viewsToBeAdjusted.frame.origin.y-100, viewsToBeAdjusted.frame.size.width, viewsToBeAdjusted.frame.size.height)];
+    //            }
+    //
+    //        }
+    //
+    //    }
     
 }
 
@@ -1293,7 +1383,7 @@ float originalAssignmentScrollContentSizeHeight;
     
     MainClasspageViewController* mainClasspageViewController = (MainClasspageViewController*)self.parentViewController;
     
-    [mainClasspageViewController deleteClassCodeOnExitClassPageBtnClick];
+    [mainClasspageViewController exitStudyClasspage];
     
 }
 

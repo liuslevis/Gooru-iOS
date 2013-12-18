@@ -2,7 +2,7 @@
 //  FirstUserExperienceViewController.m
 // Gooru
 //
-//  Created by Gooru on 8/16/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -30,11 +30,8 @@
 
 #import "FirstUserExperienceViewController.h"
 #import "MainClasspageViewController.h"
+#import "RegistrationViewController.h"
 #import "LoginViewController.h"
-
-#define MULTIPLIER_CLASSPAGETABS 666
-
-
 @interface FirstUserExperienceViewController ()
 
 @end
@@ -44,18 +41,18 @@
 @synthesize viewForGestureInFirstUser;
 @synthesize viewForGestureInStudyExperience;
 @synthesize viewForGestureInAssignHW;
-@synthesize viewFUEforOther,viewFUEforStudy,viewFUEforTeach;
+@synthesize viewFUEforOther,viewFUEforStudy,viewFUEforTeach,viewFUEforTeachNoClasspages;
 @synthesize textFieldClassCode;
 @synthesize imageViewGreenHighlightAssignHW,imageViewGreenHighlightFirstUser,imageViewGreenHighlightStudyExp,imageViewGreyHighlightAssignHW,imageViewGreyHighlightFirstUser,imageViewGreyHighlightStudyExp;
 
 NSMutableDictionary* dictStarterClasspagesFUE;
-
-AppDelegate* appDelegate;
+#define MULTIPLIER_CLASSPAGETABS 666
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        // Custom initialization
     }
     return self;
 }
@@ -83,10 +80,14 @@ AppDelegate* appDelegate;
     viewFUEforStudy.frame=CGRectMake(0, 0, viewFUEforStudy.frame.size.width, viewFUEforStudy.frame.size.height);
     [self.view addSubview:viewFUEforStudy];
     
+    viewFUEforTeachNoClasspages.frame=CGRectMake(0, 0, viewFUEforTeachNoClasspages.frame.size.width, viewFUEforTeachNoClasspages.frame.size.height);
+    [self.view addSubview:viewFUEforTeachNoClasspages];
+    
     if ([stringCheckingFUE isEqualToString:@"Other"]) {
         viewFUEforOther.hidden=FALSE;
         viewFUEforStudy.hidden=TRUE;
         viewFUEforTeach.hidden=TRUE;
+        viewFUEforTeachNoClasspages.hidden = TRUE;
         
         imageViewGreenHighlightStudyExp.hidden=TRUE;
         imageViewGreenHighlightAssignHW.hidden=TRUE;
@@ -98,10 +99,20 @@ AppDelegate* appDelegate;
         viewFUEforOther.hidden=TRUE;
         viewFUEforStudy.hidden=TRUE;
         viewFUEforTeach.hidden=FALSE;
+        viewFUEforTeachNoClasspages.hidden = TRUE;
+        
     }else if ([stringCheckingFUE isEqualToString:@"Study"]){
         viewFUEforOther.hidden=TRUE;
         viewFUEforStudy.hidden=FALSE;
         viewFUEforTeach.hidden=TRUE;
+        viewFUEforTeachNoClasspages.hidden = TRUE;
+        
+    }else if ([stringCheckingFUE isEqualToString:@"TeachNoClasspages"]){
+        viewFUEforOther.hidden=TRUE;
+        viewFUEforStudy.hidden=TRUE;
+        viewFUEforTeach.hidden=TRUE;
+        viewFUEforTeachNoClasspages.hidden = FALSE;
+        
     }
     [self addLeftGestureOnPaticularView:viewForGestureInFirstUser];
     [self addLeftGestureOnPaticularView:viewForGestureInStudyExperience];
@@ -109,17 +120,16 @@ AppDelegate* appDelegate;
     [self addRightGestureOnPaticularView:viewForGestureInAssignHW];
     [self addRightGestureOnPaticularView:viewForGestureInStudyExperience];
     
-    appDelegate = (AppDelegate*) [[UIApplication sharedApplication] delegate];
     
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    NSArray* arrSuggestedClasspageTitles  = [appDelegate getArrayValueByKey:@"StarterClasspages1"];;
+    NSArray* arrSuggestedClasspageTitles = [[NSArray alloc] initWithObjects:@"Welcome to Gooru!",@"Algebra 1",@"Ancient Civilizations",@"Physics",@"ELA", nil];
     
-    NSArray* arrSuggestedClasspageIds = [appDelegate getArrayValueByKey:@"StarerClasspagesGooruId"];
+    NSArray* arrSuggestedClasspageIds = [[NSArray alloc] initWithObjects:@"0305adfe-2edc-4054-a29e-616f11f06181",@"272e9c46-c0a9-427a-9a0d-f31eb051ce3a",@"087ddf35-6b2b-4411-9832-d8e789a25888",@"6b2fbea8-b3e9-4b74-937b-28e209049eec",@"18c2e8db-ffcc-471e-960b-78b5ae30b98d", nil];
     
     
-    NSArray* arrSuggestedClasspageCodes = [appDelegate getArrayValueByKey:@"StarterClasspageClasscodes"];
+    NSArray* arrSuggestedClasspageCodes = [[NSArray alloc] initWithObjects:@"I6WAII1",@"I4VFPII",@"I4VDCII",@"I6RQYII",@"I8RCRII", nil];
     
     dictStarterClasspagesFUE = [[NSMutableDictionary alloc] init];
     for (int i=0; i<5; i++) {
@@ -149,49 +159,49 @@ AppDelegate* appDelegate;
     
     NSUInteger touches = recognizer.numberOfTouches;
     
-    switch (touches) {
-            
-        case 1:
-            if (recognizer.view==viewForGestureInFirstUser) {
-                [self animateView:viewFirstUser forFinalFrame:CGRectMake(-769, 88, viewFirstUser.frame.size.width, viewFirstUser.frame.size.height)];
-                [self animateView:viewStudyExperience forFinalFrame:CGRectMake(0, 88, viewStudyExperience.frame.size.width, viewStudyExperience.frame.size.height)];
-                imageViewGreenHighlightStudyExp.hidden=FALSE;
-                imageViewGreenHighlightAssignHW.hidden=TRUE;
-                imageViewGreenHighlightFirstUser.hidden=TRUE;
-                imageViewGreyHighlightFirstUser.hidden=FALSE;
-                imageViewGreyHighlightStudyExp.hidden=TRUE;
-                imageViewGreyHighlightAssignHW.hidden=FALSE;
-            }else if (recognizer.view==viewForGestureInStudyExperience){
-                [self animateView:viewStudyExperience forFinalFrame:CGRectMake(-769, 88, viewStudyExperience.frame.size.width, viewStudyExperience.frame.size.height)];
-                [self animateView:viewAssignHW forFinalFrame:CGRectMake(0, 88, viewAssignHW.frame.size.width, viewAssignHW.frame.size.height)];
-                imageViewGreenHighlightStudyExp.hidden=TRUE;
-                imageViewGreenHighlightAssignHW.hidden=FALSE;
-                imageViewGreenHighlightFirstUser.hidden=TRUE;
-                imageViewGreyHighlightFirstUser.hidden=FALSE;
-                imageViewGreyHighlightStudyExp.hidden=FALSE;
-                imageViewGreyHighlightAssignHW.hidden=TRUE;
-            }
-            
-            
-            break;
-            
-        case 2:
-            
-            break;
-            
-        case 3:
-            
-            
-            
-            
-            
-            break;
-            
-        default:
-            
-            break;
-            
-    }
+       switch (touches) {
+    
+           case 1:
+               if (recognizer.view==viewForGestureInFirstUser) {
+                   [self animateView:viewFirstUser forFinalFrame:CGRectMake(-769, 88, viewFirstUser.frame.size.width, viewFirstUser.frame.size.height)];
+                   [self animateView:viewStudyExperience forFinalFrame:CGRectMake(0, 88, viewStudyExperience.frame.size.width, viewStudyExperience.frame.size.height)];
+                   imageViewGreenHighlightStudyExp.hidden=FALSE;
+                   imageViewGreenHighlightAssignHW.hidden=TRUE;
+                   imageViewGreenHighlightFirstUser.hidden=TRUE;
+                   imageViewGreyHighlightFirstUser.hidden=FALSE;
+                   imageViewGreyHighlightStudyExp.hidden=TRUE;
+                   imageViewGreyHighlightAssignHW.hidden=FALSE;
+               }else if (recognizer.view==viewForGestureInStudyExperience){
+                   [self animateView:viewStudyExperience forFinalFrame:CGRectMake(-769, 88, viewStudyExperience.frame.size.width, viewStudyExperience.frame.size.height)];
+                   [self animateView:viewAssignHW forFinalFrame:CGRectMake(0, 88, viewAssignHW.frame.size.width, viewAssignHW.frame.size.height)];
+                   imageViewGreenHighlightStudyExp.hidden=TRUE;
+                   imageViewGreenHighlightAssignHW.hidden=FALSE;
+                   imageViewGreenHighlightFirstUser.hidden=TRUE;
+                   imageViewGreyHighlightFirstUser.hidden=FALSE;
+                   imageViewGreyHighlightStudyExp.hidden=FALSE;
+                   imageViewGreyHighlightAssignHW.hidden=TRUE;
+               }
+               
+    
+              break;
+    
+            case 2:
+    
+              break;
+    
+            case 3:
+    
+    
+    
+    
+    
+                break;
+    
+            default:
+    
+                break;
+    
+       }
     
     
     
@@ -215,7 +225,7 @@ AppDelegate* appDelegate;
                 
             }else if (recognizer.view==viewForGestureInStudyExperience){
                 
-                [self animateView:viewFirstUser forFinalFrame:CGRectMake(0, 88, viewFirstUser.frame.size.width, viewFirstUser.frame.size.height)];
+                 [self animateView:viewFirstUser forFinalFrame:CGRectMake(0, 88, viewFirstUser.frame.size.width, viewFirstUser.frame.size.height)];
                 [self animateView:viewStudyExperience forFinalFrame:CGRectMake(769, 88, viewStudyExperience.frame.size.width, viewStudyExperience.frame.size.height)];
                 imageViewGreenHighlightStudyExp.hidden=TRUE;
                 imageViewGreenHighlightAssignHW.hidden=TRUE;
@@ -260,7 +270,7 @@ AppDelegate* appDelegate;
     swipe.direction = UISwipeGestureRecognizerDirectionLeft;
     
     swipe.delaysTouchesBegan = YES;
-    [tempView addGestureRecognizer:swipe];
+     [tempView addGestureRecognizer:swipe];
 }
 - (void)addRightGestureOnPaticularView:(UIView *)tempView{
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleViewsSwipeRight:)];
@@ -296,6 +306,8 @@ AppDelegate* appDelegate;
     
     MainClasspageViewController* controller = (MainClasspageViewController*)self.parentViewController;
     [controller btnActionStarterClasspageFUE:sender];
+
+
 }
 
 
@@ -308,27 +320,16 @@ AppDelegate* appDelegate;
 #pragma mark FUEStudy BtnAction
 
 - (IBAction)btnActionStudyNow:(id)sender{
-    [self classcodeVerify];
+    
+    MainClasspageViewController* controller = (MainClasspageViewController*)self.parentViewController;
+    [controller verifyClasscode:textFieldClassCode.text];
+    
 }
 
 
-#pragma mark Classcode Validation
 
-- (void)classcodeVerify{
-    
-    NSString* classpageCode =textFieldClassCode.text;
-    
-    NSString *trimmedString = [classpageCode stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSRange whiteSpaceRange = [trimmedString rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (whiteSpaceRange.location != NSNotFound) {
-        NSLog(@"Found whitespace");
-        [self alertShow:@"Oops! We don’t recognize that code. \n Try again and double check with your teacher for the correct code." withTag:25];
-    }else{
-        MainClasspageViewController* controller = (MainClasspageViewController*)self.parentViewController;
-        [controller callGetClassPageIdFromFUE:classpageCode];
-        
-    }
-}
+
+
 
 #pragma mark - View Controller Manipulators -
 
@@ -359,7 +360,7 @@ AppDelegate* appDelegate;
 #pragma mark - Alertview delegates -
 - (void)alertShow:(NSString *)strMessage withTag:(int)tag{
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[appDelegate getValueByKey:@"MessageTitle"] message:strMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Gooru" message:strMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert setTag:tag];
     
 	[alert show];

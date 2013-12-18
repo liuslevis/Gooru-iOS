@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "AppDelegate.h"
 
 @interface LBYouTubePlayerController : UIView {
     MPMoviePlayerController* videoController;

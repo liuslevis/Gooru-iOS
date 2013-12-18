@@ -2,7 +2,7 @@
 //  FlaggingPopupViewController.h
 // Gooru
 //
-//  Created by Gooru on 10/18/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -62,7 +62,10 @@
     
     IBOutlet UILabel *lblFlaggedTitle;
     IBOutlet UIView *viewTandC;
-
+    
+    IBOutlet UITextView *txtViewTandC;
+    IBOutlet UIScrollView *scrollTandC;
+    
     IBOutlet UIButton *btnCopyright;
     IBOutlet UILabel *lblCopyright;
     
@@ -79,8 +82,13 @@
 - (IBAction)btnActionTermsAndConditions:(id)sender;
 
 //Exposed Methods
+
 - (id)initWithCollectionInfo:(NSMutableDictionary*)dictIncomingCollectionInfo andResourceInfo:(NSMutableDictionary*)dictIncomingResourceInfo forCollection:(BOOL)value andParentViewController:(UIViewController*)parentViewController;
 
+
+- (id)initWithResourceInfo:(NSMutableDictionary*)dictIncomingResourceInfo andParentViewController:(UIViewController*)parentViewController;
+
+-(void)flagOnLogin;
 
 
 @end

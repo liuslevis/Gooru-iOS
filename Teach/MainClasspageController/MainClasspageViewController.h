@@ -29,6 +29,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UVDelegate.h"
 
 @interface MainClasspageViewController : UIViewController<UITextFieldDelegate,UIAlertViewDelegate>{
     
@@ -45,11 +46,27 @@
     
     //Btn Study
     IBOutlet UIButton *btnStudy;
+    
+    //Btn Discover
+    IBOutlet UIButton *btnDiscover;
+    
+    //Btn Gooru Suggest/Search
+    IBOutlet UIButton *btnGooruSuggest;
+    IBOutlet UIButton *btnGooruSearch;
+    
+    IBOutlet UIImageView *imgViewArrowTeach;
+    IBOutlet UIImageView *imgViewArrowStudy;
+    IBOutlet UIImageView *imgViewArrowDiscover;
+    
+    
     //Side Bar Classpages
     IBOutlet UIScrollView *scrollClasspageTabBar;
-    IBOutlet UIView *viewUserClasspages;
-    IBOutlet UIView *viewStarterClasspages;
-    UIButton *btn_classpageTitle;
+    IBOutlet UIView *viewTeachClasspages;
+    IBOutlet UIView *viewStudyClasspages;
+    IBOutlet UIView *viewDiscover;
+    
+    
+    UIButton *btnClasspageTitle;
 
     
     //Side bar User Settings
@@ -59,12 +76,17 @@
     //Assignment Master
     IBOutlet UIView *viewMasterAssignment;
     
+    IBOutlet UIImageView *testingImage;
     //User details area
     IBOutlet UILabel *lblUsername;
     IBOutlet UIButton *btnUserSettings;
     IBOutlet UIImageView *imgViewSettingsGear;
         
     IBOutlet UIButton *btnNarrationSettings;
+    IBOutlet UIView *viewLogoutBtn;
+    
+    IBOutlet UIButton *btnHelp;
+    
 // View/Btn Support logged IN
     IBOutlet UIView *viewBtnSupport;
     IBOutlet UIButton *btnSupportLoggedIn;
@@ -74,12 +96,24 @@
     // btn StudyNow
     IBOutlet UIButton *btnStudyNow;
     
+    IBOutlet UIButton *btnLogin;
     BOOL isYourFirstClassPageInMC;
     IBOutlet UIActivityIndicatorView *activityIndicatorPrimary;
 }
 
+//Btn Gooru Suggest/Search
+
+@property (strong, nonatomic) IBOutlet UIButton *btnGooruSuggest;
+@property (strong, nonatomic) IBOutlet UIButton *btnGooruSearch;
+
+//Btn Teach
+@property (strong, nonatomic) IBOutlet UIButton *btnTeach;
+
 //BA Sign Up!
 - (IBAction)btnActionSignUp:(id)sender;
+
+// BA Help
+- (IBAction)btnActionhelp:(id)sender;
 
 //BA Log In
 - (IBAction)btnActionLogIn:(id)sender;
@@ -93,6 +127,15 @@
 //BA Study
 - (IBAction)btnActionStudy:(id)sender;
 
+//BA Discover
+- (IBAction)btnActionDiscover:(id)sender;
+
+//BA Gooru Suggest/Search
+- (IBAction)btnActionGooruSuggest:(id)sender;
+- (IBAction)btnActionGooruSearch:(id)sender;
+
+
+
 //BA Study Now
 - (IBAction)btnActionStudyNow:(id)sender;
 
@@ -105,17 +148,18 @@
 
 - (void)onLogin;
 
+- (void)starterClasspageIntiatior:(int)tag;
+
 - (void)setUpStarterClasspageDictionaryAndShouldAutoPopulate:(BOOL)value;
 
-// Method called from FUEViewController
+- (void)verifyClasscode:(NSString*)classcode;
 
-- (void)callGetClassPageIdFromFUE:(NSString *)classPageCode;
- //Delete classcode from FUEOther
-- (void)deleteClassCodeOnExitClassPageBtnClick;
+//Exit Study Classpage
+- (void)exitStudyClasspage;
 
 // BA Support
-
 - (IBAction)btnActionSupport:(id)sender;
 
+- (IBAction)btnActionCollectionAnalytics:(id)sender;
 
 @end

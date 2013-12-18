@@ -2,7 +2,7 @@
 //  LoginViewController.h
 // Gooru
 //
-//  Created by Gooru on 13/08/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -43,6 +43,7 @@
     IBOutlet UITextField *txtFldUsername;
     UITextField *activeField;
     
+    IBOutlet UIWebView *webviewGmailConnect;
     // uiview
      IBOutlet UIView *viewLogin;
     
@@ -78,5 +79,10 @@
 
 - (IBAction)btnAction_GmailConnect:(id)sender;
 - (IBAction)btnAction_Glorg:(id)sender;
+
+// Exposed Methods
+- (id)initWithParentViewController:(UIViewController*)incomingViewController;
+
+- (void)onGmailAuth;
 
 @end

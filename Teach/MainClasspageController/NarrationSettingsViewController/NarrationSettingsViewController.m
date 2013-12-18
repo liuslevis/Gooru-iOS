@@ -2,7 +2,7 @@
 //  NarrationSettingsViewController.m
 // Gooru
 //
-//  Created by Gooru on 8/15/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -80,63 +80,65 @@ UIFont* tahoma;
 }
 
 - (void)setNarrationDefaultSettings{
-    
-    
+  
+
     if ([standardUserDefaults objectForKey:@"teacherNarrationBackgroundColor"] == nil) {
-        UIButton* btnDefault;
+          UIButton* btnDefault;
         btnDefault = (UIButton*)[viewNarrationBackgroundParent viewWithTag:9];
         [btnDefault sendActionsForControlEvents:UIControlEventTouchUpInside];
-        
+   
     }else{
-        UIButton* btnDefault;
+          UIButton* btnDefault;
         btnDefault = (UIButton*)[viewNarrationBackgroundParent viewWithTag:[[standardUserDefaults objectForKey:@"TagForNarrationBackgrnd"] intValue]];
         [btnDefault sendActionsForControlEvents:UIControlEventTouchUpInside];
         
     }
     
     if ([standardUserDefaults objectForKey:@"teacherNarrationTextColor"] == nil) {
-        UIButton* btnDefault;
+          UIButton* btnDefault;
         btnDefault = (UIButton*)[viewTextColorParent viewWithTag:13];
         [btnDefault sendActionsForControlEvents:UIControlEventTouchUpInside];
         
     }else{
-        UIButton* btnDefault;
+          UIButton* btnDefault;
         btnDefault = (UIButton*)[viewTextColorParent viewWithTag:[[standardUserDefaults objectForKey:@"TagForNarrationTextColor"] intValue]];
         [btnDefault sendActionsForControlEvents:UIControlEventTouchUpInside];
         
     }
     
     if ([standardUserDefaults objectForKey:@"teacherNarrationFontType"] == nil) {
-        UIButton* btnDefault;
+          UIButton* btnDefault;
         btnDefault = (UIButton*)[viewFontParent viewWithTag:7];
         [btnDefault sendActionsForControlEvents:UIControlEventTouchUpInside];
         
     }else{
-        UIButton* btnDefault;
+          UIButton* btnDefault;
         btnDefault = (UIButton*)[viewFontParent viewWithTag:[[standardUserDefaults objectForKey:@"TagForNarrationFontType"] intValue]];
         [btnDefault sendActionsForControlEvents:UIControlEventTouchUpInside];
         
     }
     
     if ([standardUserDefaults objectForKey:@"teacherNarrationTextSize"] == nil) {
-        UIButton* btnDefault;
+          UIButton* btnDefault;
         btnDefault = (UIButton*)[viewFontSizeParent viewWithTag:10];
         [btnDefault sendActionsForControlEvents:UIControlEventTouchUpInside];
         
     }else{
-        UIButton* btnDefault;
+          UIButton* btnDefault;
         btnDefault = (UIButton*)[viewFontSizeParent viewWithTag:[[standardUserDefaults objectForKey:@"TagForNarrationTextSize"] intValue]];
         [btnDefault sendActionsForControlEvents:UIControlEventTouchUpInside];
         
     }
     
-    
+
 }
 
 #pragma mark Narration Background Color Button Action
 
 
 - (IBAction)btnActionNarrationBackrgrndColor:(id)sender {
+    
+     [appDelegate logMixpanelforevent:@"Narration Settings Edited" and:NULL];
     
     NSLog(@"tag : %i",[sender tag]);
     UIButton* tempBtn =  (UIButton*)sender;
@@ -198,6 +200,7 @@ UIFont* tahoma;
 
 - (IBAction)btnActionTextColor:(id)sender {
     
+    [appDelegate logMixpanelforevent:@"Narration Settings Edited" and:NULL];
     NSLog(@"tag : %i",[sender tag]);
     UIButton* tempBtn =  (UIButton*)sender;
     
@@ -255,6 +258,7 @@ UIFont* tahoma;
 }
 
 - (IBAction)btnActionTextFont:(id)sender {
+    [appDelegate logMixpanelforevent:@"Narration Settings Edited" and:NULL];
     
     NSLog(@"tag : %i",[sender tag]);
     
@@ -275,28 +279,35 @@ UIFont* tahoma;
     switch ([sender tag]) {
             
         case 7:
+            //                lblPreviewNarrationText.font = arial;
             font = arial;
             break;
             
         case 14:
             
+            //                lblPreviewNarrationText.font = baskerville;
             font = baskerville;
             
             break;
             
         case 21:
+            
+            //                lblPreviewNarrationText.font = chalkboard;
             font = chalkboard;
             
             
             break;
             
         case 28:
+            
+            //                lblPreviewNarrationText.font = grandhotel;
             font = grandhotel;
             
             break;
             
         case 35:
             
+            //                lblPreviewNarrationText.font = sniglet;
             font = sniglet;
             
             
@@ -313,6 +324,7 @@ UIFont* tahoma;
 }
 
 - (IBAction)btnActionTextSize:(id)sender {
+    [appDelegate logMixpanelforevent:@"Narration Settings Edited" and:NULL];
     NSLog(@"tag : %i",[sender tag]);
     UIButton* tempBtn =  (UIButton*)sender;
     
@@ -412,6 +424,9 @@ UIFont* tahoma;
 }
 
 - (void)closeNarrationSettings{
+    
+    //Mixpanel track closeNarrationSetting
+    [appDelegate logMixpanelforevent:@"Narration Setting Closed" and:nil];
     [self removeCurrentDetailViewController];
 }
 

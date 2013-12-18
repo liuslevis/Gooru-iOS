@@ -1,8 +1,8 @@
 //
 //  MySHKConfigurator.h
-//  SocialShare
+// Gooru
 //
-//  Created by Gooru on 6/18/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -29,7 +29,6 @@
 //
 
 #import "DefaultSHKConfigurator.h"
-#import "AppDelegate.h"
 
 @interface MySHKConfigurator : DefaultSHKConfigurator
 

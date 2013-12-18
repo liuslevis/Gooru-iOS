@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>isMixpanelEnabled</key>
-	<true/>
+	<false/>
 	<key>MessageTitle</key>
 	<string>Gooru</string>
 	<key>ServerURL</key>

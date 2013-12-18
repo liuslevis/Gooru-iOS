@@ -2,7 +2,7 @@
 //  LoginViewController.m
 // Gooru
 //
-//  Created by Gooru on 13/08/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -30,8 +30,9 @@
 
 #import "LoginViewController.h"
 #import "MainClasspageViewController.h"
+#import "Mixpanel.h"
 #import "SVWebViewController.h"
-
+#import "FlaggingPopupViewController.h"
 
 #define MAX_LENGTH 10
 #define TAG_FORGOT_PASSWORD_POPUP 8975
@@ -49,8 +50,10 @@
 NSString* userName;
 NSString* password;
 NSString* forgotPasswordEmailId;
-bool isGmailConnect = FALSE;
+BOOL isGmailConnect = FALSE;
 NSUserDefaults *standardUserDefaults;
+
+NSString* strParentViewController;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,6 +61,17 @@ NSUserDefaults *standardUserDefaults;
     if (self) {
         // Custom initialization
     }
+    return self;
+}
+
+- (id)initWithParentViewController:(UIViewController*)incomingViewController{
+    
+    self = [super initWithNibName:@"LoginViewController" bundle:nil];
+    
+    NSLog(@"incomingViewController name : %@",[incomingViewController nibName]);
+    
+    strParentViewController = [incomingViewController nibName];
+    
     return self;
 }
 
@@ -80,12 +94,6 @@ NSUserDefaults *standardUserDefaults;
     txtFldPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
     txtFldUsername.delegate = self;
     txtFldPassword.delegate = self;
-    // Do any additional setup after loading the view from its nib.
-}
-
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -98,21 +106,38 @@ NSUserDefaults *standardUserDefaults;
      name: UIKeyboardDidHideNotification
      object:nil];
     
-  
-        if ([[standardUserDefaults valueForKey:@"gmailtoken"] isEqualToString:@"NA"]) {
-            viewForgotPassword.frame=CGRectMake(1024, 239, viewForgotPassword.frame.size.width, viewForgotPassword.frame.size.height);
-            viewLogin.frame=CGRectMake(230, 60, viewLogin.frame.size.width, viewLogin.frame.size.height);
-            [self.view addSubview:viewForgotPassword];
-            [self.view addSubview:viewLogin];
-        }else{
-            if (isGmailConnect) {
-            [appDelegate showLibProgressOnView:self.view andMessage:@""];
-            [self getUserInfo];
-
-        }
-    }
+    viewForgotPassword.frame=CGRectMake(1024, 239, viewForgotPassword.frame.size.width, viewForgotPassword.frame.size.height);
+    viewLogin.frame=CGRectMake(230, 60, viewLogin.frame.size.width, viewLogin.frame.size.height);
+    [self.view addSubview:viewForgotPassword];
+    [self.view addSubview:viewLogin];
+    
+    //Adding Observer to Refresh Views
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGmailAuth) name:@"onGmailAuth" object:nil];
 
     
+    
+}
+
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+}
+
+- (void)onGmailAuth{
+    
+     NSLog(@"onGmailAuth");
+    
+    if ([[standardUserDefaults valueForKey:@"gmailtoken"] isEqualToString:@"NA"]) {
+        
+        NSLog(@"Gmail Login Unsuccessfull");
+        [standardUserDefaults setObject:[NSNumber numberWithBool:FALSE] forKey:@"isLoggedIn"];
+        
+    }else{
+        [appDelegate showLibProgressOnView:self.view andMessage:@""];
+        [self getUserInfo];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -162,6 +187,7 @@ NSUserDefaults *standardUserDefaults;
             [self login_AlertShow:[appDelegate getValueByKey:@"EmptyPassword"]];
             return;
         }else {
+            isGmailConnect = FALSE;
             [self login];
         }
     }
@@ -207,7 +233,7 @@ NSUserDefaults *standardUserDefaults;
     [standardUserDefaults setObject:[NSNumber numberWithBool:TRUE] forKey:@"isLoggedIn"];
        isGmailConnect = TRUE;
   
-    SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:[appDelegate getValueByKey:@"GoogleSignInURL"]];
+    SVModalWebViewController *webViewController = [[SVModalWebViewController alloc] initWithAddress:@"http://www.goorulearning.org/gmarketplace/sakai?from=google&domain=gmail.com"];
     [self presentModalViewController:webViewController animated:YES];
     
 }
@@ -244,7 +270,8 @@ NSUserDefaults *standardUserDefaults;
     }else{
     
         [self animateView:viewLogin forFinalFrame:CGRectMake(viewLogin.frame.origin.x, viewLogin.frame.origin.y + 160, viewLogin.frame.size.width, viewLogin.frame.size.height)];
-      
+        
+   
         [self animateView:viewForgotPassword forFinalFrame:CGRectMake(viewForgotPassword.frame.origin.x, viewForgotPassword.frame.origin.y + 160, viewForgotPassword.frame.size.width, viewForgotPassword.frame.size.height)];
   
     }
@@ -315,6 +342,9 @@ NSUserDefaults *standardUserDefaults;
         [textField resignFirstResponder];
         [self.txtFldPassword becomeFirstResponder];
     }
+//    else  if (textField==txtFldClasspageCode){
+//        [self classcodeVerify];
+//    }
     return TRUE;
 }
 
@@ -327,6 +357,15 @@ NSUserDefaults *standardUserDefaults;
             [self login];
         }
     }
+//    else if (textField == txtFldClasspageCode){
+//        if (textField.text.length >= MAX_LENGTH && range.length == 0)
+//        {
+//            return NO; // return NO to not change text
+//        }
+//        else
+//        {return YES;}
+//        
+//    }
     return TRUE;
 }
 
@@ -425,8 +464,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         
         if (isGmailConnect) {
             token           = [NSString stringWithFormat:@"%@", [standardUserDefaults valueForKey:@"gmailtoken"]];
-
-                    }else{
+        }else{
             token           = [NSString stringWithFormat:@"%@", [results objectForKey:@"token"]];
         }
         
@@ -475,19 +513,59 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         [standardUserDefaults setObject:dataImage forKey:@"dataImage"];
         
         
-        MainClasspageViewController *mainClasspageViewController=(MainClasspageViewController *)self.parentViewController;
         
-        [btnPopupShade sendActionsForControlEvents:UIControlEventTouchUpInside];
-        NSLog(@"MainClasspageViewController : %@",mainClasspageViewController);
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel identify:username];
+        
+        [mixpanel.people set:@"$email" to:emailId];
+        [mixpanel.people set:@"$first_name" to:firstName];
+        [mixpanel.people set:@"$last_name" to:lastName];
+        [mixpanel.people set:@"$username" to:username];
+        [mixpanel.people set:@"Last Login" to:[NSDate date]];
 
-        txtFldUsername.text = @"";
-        txtFldPassword.text = @"";
-        [mainClasspageViewController onLogin];
-        isGmailConnect = FALSE;
+        
+        
+        //Mixpanel track Successful Login
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:username forKey:@"username"];
+        [dictionary setObject:gooruUId forKey:@"gooruUId"];
+        
+        
+        [appDelegate logMixpanelforevent:@"Log-in Successful" and:dictionary];
+        
+    
+        
 
-        //[mainClasspageViewController ]
-      
+        [self manageOnLogin];
     }
+    
+    
+    
+}
+
+- (void)manageOnLogin{
+    
+    [btnPopupShade sendActionsForControlEvents:UIControlEventTouchUpInside];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"onLogin" object:self userInfo:nil];
+    
+    txtFldUsername.text = @"";
+    txtFldPassword.text = @"";
+    
+    if ([strParentViewController isEqualToString:@"MainClasspageViewController"]) {
+        MainClasspageViewController *mainClasspageViewController = (MainClasspageViewController *)self.parentViewController;
+        [mainClasspageViewController.btnTeach sendActionsForControlEvents:UIControlEventTouchUpInside];
+        
+    }else if([strParentViewController isEqualToString:@"FlaggingPopupViewController"]){
+        
+        FlaggingPopupViewController* flaggingPopupViewController = (FlaggingPopupViewController*)self.parentViewController;
+        [flaggingPopupViewController flagOnLogin];
+        
+    }
+
+
+    
+    
     
     
     
@@ -496,6 +574,8 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 #pragma mark gmail Connect
 
 - (void)getUserInfo{
+
+//     http://www.goorulearning.org/gooruapi/rest/usertoken/user?sessionToken=711d8cf0-f8e8-44bd-a592-d49c3e148eb8
 
     NSString *strURL = [NSString stringWithFormat:@"%@/gooruapi/rest/usertoken/user?sessionToken=%@",[appDelegate getValueByKey:@"ServerURL"],[standardUserDefaults valueForKey:@"gmailtoken"]];
 

@@ -2,7 +2,7 @@
 //  FlaggingPopupViewController.m
 // Gooru
 //
-//  Created by Gooru on 10/18/13.
+//  Created by Gooru on 8/9/13.
 //  Copyright (c) 2013 Gooru. All rights reserved.
 //  http://www.goorulearning.org/
 //
@@ -30,6 +30,12 @@
 
 #import "FlaggingPopupViewController.h"
 #import "CollectionPlayerV2ViewController.h"
+#import "ResourcePlayerViewController.h"
+#import "AFHTTPClient.h"
+#import "Toast+UIView.h"
+#import "NSString_stripHtml.h"
+#import "AppDelegate.h"
+#import "LoginViewController.h"
 
 
 #define COLLECTION_TITLE @"CollectionTitle"
@@ -79,11 +85,23 @@ NSMutableDictionary* dictCollectionInfo;
 NSMutableDictionary* dictResourceInfo;
 BOOL isCollection = FALSE;
 
+//Incoming Details
+NSString* sessionToken;
+NSString* serverUrl;
+NSString* gooruOID;
+
+NSUserDefaults* standardUserDefaults;
+AppDelegate* appDelegate;
 NSString* strSelection;
 
+NSMutableArray* arrFlaggingSelection;
+
 CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
+ResourcePlayerViewController* resourcePlayerViewController;
+LoginViewController* loginViewController;
 
-
+BOOL isParentCollectionPlayer = FALSE;
+BOOL isLoggedIn = FALSE;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -96,8 +114,20 @@ CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
 
 - (id)initWithCollectionInfo:(NSMutableDictionary*)dictIncomingCollectionInfo andResourceInfo:(NSMutableDictionary*)dictIncomingResourceInfo forCollection:(BOOL)value andParentViewController:(UIViewController*)parentViewController{
     
-    collectionPlayerV2ViewController = parentViewController;
+    self = [super initWithNibName:@"FlaggingPopupViewController" bundle:nil];
+    
+    if ([parentViewController isKindOfClass:[CollectionPlayerV2ViewController class]]) {
+        collectionPlayerV2ViewController = (CollectionPlayerV2ViewController*)parentViewController;
+        isParentCollectionPlayer = TRUE;
+        NSLog(@"parentViewController : CollectionPlayerV2ViewController");
+    }else{
+        resourcePlayerViewController = (ResourcePlayerViewController*)parentViewController;
+        isParentCollectionPlayer = FALSE;
+        NSLog(@"parentViewController : ResourcePlayerViewController");
 
+    }
+    
+    
     isCollection = value;
     
     dictCollectionInfo = dictIncomingCollectionInfo;
@@ -107,6 +137,29 @@ CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
     NSLog(@"dictResourceInfo :%@",dictResourceInfo);
     
     return self;
+}
+
+- (id)initWithResourceInfo:(NSMutableDictionary*)dictIncomingResourceInfo andParentViewController:(UIViewController*)parentViewController{
+    
+    if ([parentViewController isKindOfClass:[CollectionPlayerV2ViewController class]]) {
+        collectionPlayerV2ViewController = (CollectionPlayerV2ViewController*)parentViewController;
+        isParentCollectionPlayer = TRUE;
+        NSLog(@"parentViewController : CollectionPlayerV2ViewController");
+    }else{
+        resourcePlayerViewController = (ResourcePlayerViewController*)parentViewController;
+        isParentCollectionPlayer = FALSE;
+        NSLog(@"parentViewController : ResourcePlayerViewController");
+    }
+    
+    isCollection = FALSE;
+   dictResourceInfo = dictIncomingResourceInfo;
+    
+    NSLog(@"dictCollectionInfo :%@",dictCollectionInfo);
+    NSLog(@"dictResourceInfo :%@",dictResourceInfo);
+    
+    return self;
+
+    
 }
 
 - (void)viewDidLoad
@@ -146,6 +199,23 @@ CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
         [lblFlaggedTitle setText:[dictResourceInfo valueForKey:RESOURCE_TITLE]];
     }
     
+    standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    //Incoming Details
+    sessionToken  = [standardUserDefaults stringForKey:@"token"];
+    isLoggedIn = [[standardUserDefaults stringForKey:@"isLoggedIn"] boolValue];
+    
+    arrFlaggingSelection = [[NSMutableArray alloc] init];
+    
+    if (isLoggedIn) {
+        NSLog(@"User Auth Status : User Logged In!");
+    }else{
+        NSLog(@"User Auth Status : User Logged Out!");
+        sessionToken = [standardUserDefaults objectForKey:@"defaultGooruSessionToken"];
+    }
+    appDelegate = (AppDelegate*) [[UIApplication sharedApplication] delegate];
+    serverUrl = [appDelegate getValueByKey:@"ServerURL"];
+ 
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -170,17 +240,14 @@ CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
     
     [self performSelector:@selector(removeCurrentDetailViewController) withObject:nil afterDelay:0.3];
     
+//    [self removeCurrentDetailViewController];
+    
 }
 
 
 #pragma mark BA Flag Options
 - (IBAction)btnActionFlagOptions:(id)sender {
     
-    if ([sender isSelected]) {
-        [sender setSelected:FALSE];
-    }else{
-        [sender setSelected:TRUE];
-    }
     
     [self manageOptionSelection:sender];
     
@@ -190,80 +257,92 @@ CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
 - (void)manageOptionSelection:(id)sender{
     
     
+    UIButton* btnOptionToSelectDeselect = (UIButton*)sender;
     
+    if ([btnOptionToSelectDeselect isSelected]) {
+        [btnOptionToSelectDeselect setSelected:FALSE];
+    }else{
+        [btnOptionToSelectDeselect setSelected:TRUE];
+    }
     
-    
+    NSString* strParams;
+
     switch ([sender tag]) {
-        case 11:{
-            
-            if ([sender isSelected]) {
-                strSelection = [NSString stringWithFormat:@"%@ - Option 1",strSelection];
-            }else{
-                strSelection = [strSelection stringByReplacingOccurrencesOfString:@" - Option 1" withString:@""];
-            }
-            
+        case 11:
+        {
+            strParams = [NSString stringWithFormat:@"missing-concept"];
             
             
             break;
         }
             
-        case 22:{
-            
-            if ([sender isSelected]) {
-                strSelection = [NSString stringWithFormat:@"%@ - Option 2",strSelection];
-            }else{
-                strSelection = [strSelection stringByReplacingOccurrencesOfString:@" - Option 2" withString:@""];
-            }
-
-            break;
-        }
-            
-        case 33:{
-            
-            if ([sender isSelected]) {
-                strSelection = [NSString stringWithFormat:@"%@ - Option 3",strSelection];
-            }else{
-                strSelection = [strSelection stringByReplacingOccurrencesOfString:@" - Option 3" withString:@""];
-            }
-
-            break;
-        }
-            
-        case 44:{
-            
-            if ([sender isSelected]) {
-                strSelection = [NSString stringWithFormat:@"%@ - Option 4",strSelection];
-            }else{
-                strSelection = [strSelection stringByReplacingOccurrencesOfString:@" - Option 4" withString:@""];
-            }
-
+        case 22:
+        {
+            strParams = [NSString stringWithFormat:@"not-loading"];
             break;
         }
             
             
+        case 33:
+        {
+            strParams = [NSString stringWithFormat:@"inappropriate"];
+            break;
+        }
+            
+        case 44:
+        {
+            strParams = [NSString stringWithFormat:@"other"];
+            break;
+        }
         default:
             break;
     }
+
+
+    
+    
+    if ([btnOptionToSelectDeselect isSelected]) {
+        
+        [arrFlaggingSelection addObject:strParams];
+        
+        
+    }else{
+        
+        for (int i = 0; i < [arrFlaggingSelection count]; i++) {
+            
+            if ([[arrFlaggingSelection objectAtIndex:i] isEqualToString:strParams]) {
+                
+                [arrFlaggingSelection removeObjectAtIndex:i];
+            }
+            
+        }
+        
+    }
     
     //Flagging Validation
-    if ([strSelection rangeOfString:@"Option"].length !=0) {
+    if ([arrFlaggingSelection count] != 0) {
         [btnSubmitFlags setEnabled:TRUE];
     }else{
         [btnSubmitFlags setEnabled:FALSE];
     }
     
-    NSLog(@"strSelection : %@",strSelection);
+    NSLog(@"arrFlaggingSelection : %@",[arrFlaggingSelection description]);
     
 }
 
 #pragma mark BA Submit Flags
 - (IBAction)btnActionSubmitFlags:(id)sender {
     
-    [collectionPlayerV2ViewController setFlaggingForCollection:isCollection];
-    
-    [self animateView:viewFlaggingPopup forFinalFrame:CGRectMake(-797, viewFlaggingPopup.frame.origin.y, viewFlaggingPopup.frame.size.width, viewFlaggingPopup.frame.size.height)];
-    
-    [self animateView:viewFlaggingConfirmedPopup forFinalFrame:CGRectMake(287, viewFlaggingConfirmedPopup.frame.origin.y, viewFlaggingConfirmedPopup.frame.size.width, viewFlaggingConfirmedPopup.frame.size.height)];
+    if(isLoggedIn){
+        
+        [self flagContent];
+        
+    }else{
+        
+        loginViewController=[[LoginViewController alloc]initWithParentViewController:self];
+        [self presentDetailController:loginViewController inMasterView:self.view];
+        
+    }
     
 }
 
@@ -274,11 +353,16 @@ CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
     }else{
         [self animateView:viewTandC forFinalFrame:CGRectMake(0, 42, viewTandC.frame.size.width, viewTandC.frame.size.height)];
     }
-        
+    
+//    [scrollTandC setContentSize:CGSizeMake(scrollTandC.frame.size.width, 1372)];
+    
     [webviewTerms loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"terms" ofType:@"html"]isDirectory:NO]]];
 
     
     [self performSelector:@selector(renderText) withObject:nil afterDelay:0.6];
+    
+//    txtViewTandC.hidden = FALSE;
+    [scrollTandC setContentOffset:CGPointMake(0, 0) animated:YES];
 
 }
 
@@ -287,6 +371,91 @@ CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
     [webviewTerms.scrollView setContentOffset:CGPointMake(0, webviewTerms.frame.size.height + 65) animated:YES];
     
 }
+
+-(void)flaggingComplete{
+    if (!isParentCollectionPlayer) {
+        
+        
+        NSLog(@"parentViewController : ResourcePlayerViewController Submit");
+        [resourcePlayerViewController setFlagging];
+        
+    }else{
+        
+        NSLog(@"parentViewController : CollectionPlayerV2ViewController Submit");
+        [collectionPlayerV2ViewController setFlaggingForCollection:isCollection];
+        
+    }
+    
+    
+    [self animateView:viewFlaggingPopup forFinalFrame:CGRectMake(-797, viewFlaggingPopup.frame.origin.y, viewFlaggingPopup.frame.size.width, viewFlaggingPopup.frame.size.height)];
+    
+    [self animateView:viewFlaggingConfirmedPopup forFinalFrame:CGRectMake(287, viewFlaggingConfirmedPopup.frame.origin.y, viewFlaggingConfirmedPopup.frame.size.width, viewFlaggingConfirmedPopup.frame.size.height)];
+}
+
+#pragma mark - API Connections -
+
+#pragma mark - flagContent -
+
+-(void)flagOnLogin{
+    
+    [self flagContent];
+    
+}
+
+-(void)flagContent{
+    
+    if (isCollection) {
+        gooruOID = [dictCollectionInfo valueForKey:COLLECTION_ID];
+    }else{
+        gooruOID = [dictResourceInfo valueForKey:RESOURCE_ACTUAL_ID];
+    }
+    sessionToken  = [standardUserDefaults stringForKey:@"token"];
+    
+    
+  
+    NSURL *url = [NSURL URLWithString:serverUrl];
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+    
+    NSMutableArray* parameterKeys = [NSMutableArray arrayWithObjects:@"data", nil];
+    
+    NSString* strFields;
+//    
+//    if ([arrFlaggingSelection count] == 1) {
+//        
+//        strFields = [NSString stringWithFormat:@"{\"target\" : {\"value\":\"content\"}, \"type\" : {\"value\":\"%@\"}, \"assocGooruOid\":\"%@\"}",[arrFlaggingSelection objectAtIndex:0],gooruOID];
+//        
+//    }else{
+//        
+//        NSMutableArray* arrValue = [[NSMutableArray alloc] init];
+//        
+//        for (int i = 0 ; i < [arrFlaggingSelection count]; i++) {
+//            
+//            [arrValue addObject:[NSString stringWithFormat:@"{\"value\":\"%@\"}",[arrFlaggingSelection objectAtIndex:i]]];
+//            
+//        }
+//
+//        strFields = [NSString stringWithFormat:@"{\"target\" : {\"value\":\"content\"}, \"types\" : [%@], \"assocGooruOid\":\"%@\"}",[arrValue componentsJoinedByString:@","],gooruOID];
+//        
+//    }
+strFields = [NSString stringWithFormat:@"{\"target\" : {\"value\":\"content\"}, \"type\" : {\"value\":\"other\"}, \"assocGooruOid\":\"%@\"}",gooruOID];
+	NSMutableArray* parameterValues =  [NSMutableArray arrayWithObjects:strFields, nil];
+	NSMutableDictionary* dictPostParams = [NSMutableDictionary dictionaryWithObjects:parameterValues forKeys:parameterKeys];
+    
+    httpClient.parameterEncoding = AFJSONParameterEncoding;
+    
+    [httpClient postPath:[NSString stringWithFormat:@"/gooruapi/rest/v2/flag?sessionToken=%@",sessionToken] parameters:dictPostParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *responseStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSLog(@"flagContent Response : %@",responseStr);
+        NSArray *results = [responseStr JSONValue];
+        [self flaggingComplete];
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"[HTTPClient Error]: %@", [error description]);
+    }];
+    
+}
+
+
 
 #pragma mark - KeyBoard delegates -
 
@@ -332,6 +501,32 @@ CollectionPlayerV2ViewController* collectionPlayerV2ViewController;
 
 
 #pragma mark - Remove ViewController -
+
+- (void)presentDetailController:(UIViewController*)detailVC inMasterView:(UIView*)viewMaster{
+    
+    
+    [self addChildViewController:detailVC];
+    
+    //2. Define the detail controller's view size
+    //    detailVC.view.frame = [self frameForDetailController];
+    
+    //3. Add the Detail controller's view to the Container's detail view and save a reference to the detail View Controller
+    [viewMaster addSubview:detailVC.view];
+    detailVC.view.alpha=0;
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         // theView.center = newCenter;
+                         detailVC.view.alpha = 1;
+                     }
+                     completion:^(BOOL finished){
+                         // Do other things
+                     }];
+    //  self.currentDetailViewController = detailVC;
+    
+    //4. Complete the add flow calling the function didMoveToParentViewController
+    [detailVC didMoveToParentViewController:self];
+}
+
 
 - (void)removeCurrentDetailViewController{
     

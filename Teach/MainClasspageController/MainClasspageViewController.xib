@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
@@ -8,22 +8,33 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainClasspageViewController">
             <connections>
                 <outlet property="activityIndicatorPrimary" destination="85" id="86"/>
+                <outlet property="btnDiscover" destination="JYn-0M-pVH" id="mPS-QM-ZxF"/>
+                <outlet property="btnGooruSearch" destination="ZS1-dj-LZY" id="Cpe-Rr-lhH"/>
+                <outlet property="btnGooruSuggest" destination="jh0-1X-k3q" id="AP1-Xl-mBC"/>
+                <outlet property="btnHelp" destination="9" id="sf3-OG-bwX"/>
+                <outlet property="btnLogin" destination="10" id="YeY-eX-wyt"/>
                 <outlet property="btnNarrationSettings" destination="82" id="83"/>
                 <outlet property="btnStudy" destination="20" id="44"/>
                 <outlet property="btnStudyNow" destination="11" id="101"/>
+                <outlet property="btnSupportLoggedIn" destination="89" id="92"/>
+                <outlet property="btnSupportLoggedOut" destination="95" id="98"/>
                 <outlet property="btnTeach" destination="21" id="43"/>
                 <outlet property="btnUserSettings" destination="26" id="69"/>
+                <outlet property="imgViewArrowDiscover" destination="2Hl-gg-FiS" id="juz-vl-Ads"/>
+                <outlet property="imgViewArrowStudy" destination="TDj-6O-SC8" id="G7h-YN-LQv"/>
+                <outlet property="imgViewArrowTeach" destination="xZQ-B8-w8p" id="Z2D-dY-3i8"/>
                 <outlet property="imgViewSettingsGear" destination="23" id="79"/>
                 <outlet property="lblUsername" destination="24" id="64"/>
                 <outlet property="scrollClasspageTabBar" destination="31" id="48"/>
                 <outlet property="txtFieldClasscode" destination="12" id="39"/>
                 <outlet property="view" destination="2" id="3"/>
+                <outlet property="viewDiscover" destination="TUb-du-fet" id="xn5-IO-MAp"/>
                 <outlet property="viewMasterAssignment" destination="49" id="50"/>
                 <outlet property="viewSideBar" destination="27" id="jeo-yK-Wod"/>
-                <outlet property="viewStarterClasspages" destination="51" id="63"/>
+                <outlet property="viewStudyClasspages" destination="51" id="auk-HW-eMx"/>
+                <outlet property="viewTeachClasspages" destination="28" id="zAN-va-5jc"/>
                 <outlet property="viewTopBarLoggedIn" destination="16" id="36"/>
                 <outlet property="viewTopBarLoggedOut" destination="8" id="37"/>
-                <outlet property="viewUserClasspages" destination="28" id="60"/>
                 <outlet property="viewUserSettings" destination="70" id="78"/>
             </connections>
         </placeholder>
@@ -38,64 +49,185 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </imageView>
                 <view contentMode="scaleToFill" id="49" userLabel="View - AssignmentMaster">
-                    <rect key="frame" x="258" y="70" width="768" height="700"/>
+                    <rect key="frame" x="257" y="70" width="768" height="700"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </view>
                 <view contentMode="scaleToFill" id="27" userLabel="View - SideBar">
-                    <rect key="frame" x="0.0" y="70" width="258" height="698"/>
+                    <rect key="frame" x="0.0" y="70" width="259" height="698"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="leftBarBackground.png" id="29">
                             <rect key="frame" x="0.0" y="0.0" width="258" height="705"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                         </imageView>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="31" userLabel="Scroll View - scrollTabBar">
                             <rect key="frame" x="0.0" y="0.0" width="258" height="698"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" id="28" userLabel="View - User Heading">
-                                    <rect key="frame" x="0.0" y="0.0" width="257" height="19"/>
+                                <view clipsSubviews="YES" tag="10001" contentMode="scaleToFill" id="28" userLabel="View - Teach Classpages">
+                                    <rect key="frame" x="0.0" y="0.0" width="257" height="50"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="SectionTitle.png" id="32">
-                                            <rect key="frame" x="0.0" y="0.0" width="257" height="19"/>
+                                        <view contentMode="scaleToFill" id="7rs-I9-F7l">
+                                            <rect key="frame" x="0.0" y="0.0" width="257" height="50"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Your Classpages" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="33" userLabel="Label - User Class Pages">
-                                            <rect key="frame" x="8" y="0.0" width="240" height="19"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                            <subviews>
+                                                <button opaque="NO" tag="100010" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="21">
+                                                    <rect key="frame" x="0.0" y="0.0" width="257" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
+                                                    <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <state key="normal" title="Teach" backgroundImage="classpagebuttondefault.png">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <state key="selected" backgroundImage="classpageButtonSelected.png"/>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="btnActionTeach:" destination="-1" eventType="touchUpInside" id="40"/>
+                                                    </connections>
+                                                </button>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Downarrow.png" id="xZQ-B8-w8p">
+                                                    <rect key="frame" x="215" y="22" width="11" height="6"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <view contentMode="scaleToFill" id="51" userLabel="View - Suggested Heading">
-                                    <rect key="frame" x="0.0" y="20" width="257" height="19"/>
+                                <view clipsSubviews="YES" tag="10002" contentMode="scaleToFill" id="51" userLabel="View - Study Classpages">
+                                    <rect key="frame" x="0.0" y="50" width="257" height="50"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="SectionTitle.png" id="53">
-                                            <rect key="frame" x="0.0" y="0.0" width="257" height="19"/>
+                                        <button opaque="NO" tag="100020" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="20" userLabel="Button - Study">
+                                            <rect key="frame" x="0.0" y="0.0" width="257" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
+                                            <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Study" backgroundImage="classpagebuttondefault.png">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="selected" backgroundImage="classpageButtonSelected.png"/>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnActionStudy:" destination="-1" eventType="touchUpInside" id="42"/>
+                                            </connections>
+                                        </button>
+                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Downarrow.png" id="TDj-6O-SC8">
+                                            <rect key="frame" x="215" y="22" width="11" height="6"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Starter Classpages" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="59" userLabel="Label - User Class Pages">
-                                            <rect key="frame" x="8" y="0.0" width="240" height="19"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <view clipsSubviews="YES" tag="10003" contentMode="scaleToFill" id="TUb-du-fet" userLabel="View - Discover">
+                                    <rect key="frame" x="0.0" y="100" width="257" height="50"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" tag="100030" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="JYn-0M-pVH">
+                                            <rect key="frame" x="0.0" y="0.0" width="257" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
+                                            <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Discover" backgroundImage="classpagebuttondefault.png">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="selected" backgroundImage="classpageButtonSelected.png"/>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnActionDiscover:" destination="-1" eventType="touchUpInside" id="xWJ-4F-uBQ"/>
+                                            </connections>
+                                        </button>
+                                        <button hidden="YES" opaque="NO" tag="100030" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jh0-1X-k3q">
+                                            <rect key="frame" x="0.0" y="50" width="257" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
+                                            <inset key="titleEdgeInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Top Gooru Resources" backgroundImage="classpagebuttondefault.png">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="selected" backgroundImage="classpageButtonSelected.png"/>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnActionGooruSuggest:" destination="-1" eventType="touchUpInside" id="VOs-A3-P6m"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" tag="100030" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZS1-dj-LZY">
+                                            <rect key="frame" x="0.0" y="50" width="257" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
+                                            <inset key="titleEdgeInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <state key="normal" title="Gooru Search" backgroundImage="classpagebuttondefault.png">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="selected" backgroundImage="classpageButtonSelected.png"/>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnActionGooruSearch:" destination="-1" eventType="touchUpInside" id="yIU-4g-YeO"/>
+                                            </connections>
+                                        </button>
+                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Downarrow.png" id="2Hl-gg-FiS">
+                                            <rect key="frame" x="215" y="22" width="11" height="6"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <view hidden="YES" contentMode="scaleToFill" id="94" userLabel="View - viewBtn Support">
+                                    <rect key="frame" x="0.0" y="657" width="257" height="41"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" id="111">
+                                            <rect key="frame" x="0.0" y="0.0" width="257" height="1"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        </view>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="95" userLabel="btn- Support -">
+                                            <rect key="frame" x="0.0" y="0.0" width="257" height="41"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="15"/>
+                                            <state key="normal" title="Share your Feedback!" backgroundImage="classpagebuttondefault.png">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="selected" backgroundImage="classpagebuttondefault.png"/>
+                                            <state key="highlighted" backgroundImage="classpageButtonSelected.png">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnActionSupport:" destination="-1" eventType="touchUpInside" id="99"/>
+                                            </connections>
+                                        </button>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Uservoice.png" id="103">
+                                            <rect key="frame" x="15" y="5" width="30" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </scrollView>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.31764705879999999" green="0.31764705879999999" blue="0.31764705879999999" alpha="1" colorSpace="calibratedRGB"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                 </view>
                 <view contentMode="scaleToFill" id="70" userLabel="View - Settings">
@@ -149,6 +281,34 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <view hidden="YES" contentMode="scaleToFill" id="87" userLabel="View - viewBtn Support">
+                            <rect key="frame" x="0.0" y="657" width="257" height="41"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="89" userLabel="btn- Support -">
+                                    <rect key="frame" x="0.0" y="0.0" width="257" height="41"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="15"/>
+                                    <state key="normal" title="Share your Feedback!" backgroundImage="classpagebuttondefault.png">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <state key="selected" backgroundImage="classpagebuttondefault.png"/>
+                                    <state key="highlighted" backgroundImage="classpageButtonSelected.png">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="btnActionSupport:" destination="-1" eventType="touchUpInside" id="93"/>
+                                    </connections>
+                                </button>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Uservoice.png" id="102">
+                                    <rect key="frame" x="15" y="5" width="30" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
@@ -158,57 +318,23 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="topBarBackground.png" id="6" userLabel="Image View - Top bar Background">
-                            <rect key="frame" x="0.0" y="0.0" width="1034" height="51"/>
+                            <rect key="frame" x="0.0" y="0.0" width="1038" height="51"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         </imageView>
                         <view hidden="YES" contentMode="scaleToFill" id="16" userLabel="View - Logged In">
                             <rect key="frame" x="300" y="0.0" width="539" height="46"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="21">
-                                    <rect key="frame" x="365" y="0.0" width="75" height="47"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
-                                    <state key="normal" title="Teach">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <state key="selected" backgroundImage="selectedTabBackground.png"/>
-                                    <state key="highlighted">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="btnActionTeach:" destination="-1" eventType="touchUpInside" id="40"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="20">
-                                    <rect key="frame" x="442" y="0.0" width="75" height="47"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
-                                    <state key="normal" title="Study">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <state key="selected" backgroundImage="selectedTabBackground.png"/>
-                                    <state key="highlighted">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="btnActionStudy:" destination="-1" eventType="touchUpInside" id="42"/>
-                                    </connections>
-                                </button>
-                            </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                         <view contentMode="scaleToFill" id="8" userLabel="View - Logged Out">
-                            <rect key="frame" x="300" y="0.0" width="539" height="46"/>
+                            <rect key="frame" x="485" y="0.0" width="539" height="46"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9">
-                                    <rect key="frame" x="365" y="0.0" width="75" height="45"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9">
+                                    <rect key="frame" x="391" y="0.0" width="75" height="45"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
-                                    <state key="normal" title="Sign Up!">
+                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
+                                    <state key="normal" title="Help">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
@@ -217,13 +343,13 @@
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
-                                        <action selector="btnActionSignUp:" destination="-1" eventType="touchUpInside" id="46"/>
+                                        <action selector="btnActionhelp:" destination="-1" eventType="touchUpInside" id="ddx-po-eqY"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="10">
                                     <rect key="frame" x="464" y="0.0" width="75" height="45"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="14"/>
+                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
                                     <state key="normal" title="Log In">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -240,7 +366,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="11" userLabel="Button - Study Now">
-                            <rect key="frame" x="985" y="2" width="39" height="45"/>
+                            <rect key="frame" x="985" y="-50" width="39" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" title="Button" image="btnStudyNow.png">
@@ -255,7 +381,7 @@
                             </connections>
                         </button>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder=" Enter Classcode" adjustsFontSizeToFit="NO" minimumFontSize="14" background="classpageCodeTxtBoxBackground.png" clearButtonMode="whileEditing" id="12">
-                            <rect key="frame" x="848" y="2" width="137" height="44"/>
+                            <rect key="frame" x="848" y="-50" width="137" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                             <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="12"/>
@@ -299,9 +425,24 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="white" id="85">
-                            <rect key="frame" x="609" y="12" width="20" height="20"/>
+                            <rect key="frame" x="275" y="12" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
+                        <view contentMode="scaleToFill" id="C6M-oi-7ru">
+                            <rect key="frame" x="258" y="1" width="1" height="45"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.31764705882352939" green="0.31764705882352939" blue="0.31764705882352939" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fNI-jv-5Q8">
+                            <rect key="frame" x="489" y="11" width="46" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Button">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="btnActionCollectionAnalytics:" destination="-1" eventType="touchUpInside" id="J8b-ow-1R3"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
@@ -319,8 +460,9 @@
         </view>
     </objects>
     <resources>
-        <image name="SectionTitle.png" width="255" height="20"/>
+        <image name="Downarrow.png" width="22" height="11"/>
         <image name="SidebarMenuItem.png" width="16" height="16"/>
+        <image name="Uservoice.png" width="31" height="31"/>
         <image name="btnStudyNow.png" width="64" height="80"/>
         <image name="classpageButtonSelected.png" width="510" height="95"/>
         <image name="classpageCodeTxtBoxBackground.png" width="266" height="60"/>
