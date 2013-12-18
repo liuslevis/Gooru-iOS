@@ -177,15 +177,6 @@ UIAlertView *alertViewForReachability;
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - User Voice -
-
-- (UVConfig *)uvConfig {
-    UVConfig *config = [UVConfig configWithSite:@"uservoice.com"
-                                         andKey:@""
-                                      andSecret:@""];
-    config.topicId = 220827;
-    return config;
-}
 
 - (void)userVoiceWasDismissed {
     NSLog(@"UserVoice dismissed");
@@ -1524,7 +1515,6 @@ UIAlertView *alertViewForReachability;
         [appDelegate logMixpanelforevent:@"Support - Logged in" and:nil];
 
     }
-    [UserVoice presentUserVoiceForumForParentViewController:self andConfig:[self uvConfig]];
 }
 
 - (IBAction)btnActionCollectionAnalytics:(id)sender {
