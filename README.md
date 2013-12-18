@@ -1,7 +1,6 @@
-What's New 
+New Features
 =========
-Version 0.7
-
+Version 0.7  
 -The ability to search for resources on Gooru is now here!  
 -Brand new navigation helps you to easily switch between searching for resources and viewing your Classpages.
 
