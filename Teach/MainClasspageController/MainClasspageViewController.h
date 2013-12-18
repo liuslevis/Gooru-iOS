@@ -29,7 +29,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UVDelegate.h"
 
 @interface MainClasspageViewController : UIViewController<UITextFieldDelegate,UIAlertViewDelegate>{
     

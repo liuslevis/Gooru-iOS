@@ -38,7 +38,6 @@
 #import "FirstUserExperienceViewController.h"
 #import "RegistrationViewController.h"
 #import "SVWebViewController.h"
-#import "UserVoice.h"
 #import "Reachability.h"
 #import "CollectionPlayerV2ViewController.h"
 #import "DiscoverViewController.h"
