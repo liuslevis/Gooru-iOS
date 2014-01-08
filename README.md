@@ -16,7 +16,7 @@ Learn more about our open source software on our developer’s page where you ca
 
 Contributing
 =========
-We welcome contributions. 
+We welcome contributions from developers interested in helping us reach our mission. 
 
 License
 =========
