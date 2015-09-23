@@ -31,6 +31,7 @@
 		_textAttachment = attachment;
 		
 		// to avoid much too much space before the image
+		_paragraphStyle = _paragraphStyle ? _paragraphStyle : [[DTCoreTextParagraphStyle alloc] init];
 		_paragraphStyle.lineHeightMultiple = 1;
 		
 		// specifiying line height interfers with correct positioning
